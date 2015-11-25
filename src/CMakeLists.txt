@@ -1,5 +1,5 @@
-set( CMAKE_C_FLAGS "-Wall -g" )
+set(CMAKE_C_FLAGS "-Wall -g" )
 
-file(GLOB SRCS *.c *.h)
+file(GLOB SRCS *.cpp *.h)
 
-add_executable( cg ${SRCS} )
+add_executable(pathtracer ${SRCS})
