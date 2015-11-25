@@ -1,5 +1,6 @@
-set(CMAKE_C_FLAGS "-Wall -g" )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
-file(GLOB SRCS *.cpp *.h)
+set(pathtracer_SRCS main.cpp)
 
-add_executable(pathtracer ${SRCS})
+add_executable(pathtracer ${pathtracer_SRCS})

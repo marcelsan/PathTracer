@@ -1,5 +1,9 @@
 #include "MathSupport.h"
 
+#include <cmath>
+
+#define PI (3.141592653589793)
+
 void MathSupport::normalize(float vector[3])
 {
 	float normVector = norm(vector);
