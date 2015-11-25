@@ -10,12 +10,19 @@ class ImageBuffer
 {
 private:
 	std::vector<C> buffer;
-	unsigned int w;
-	unsigned int h;
+	std::size_t w;
+	std::size_t h;
 
 public:
-	ImageBuffer(unsigned int width, unsigned int height);
+	ImageBuffer(std::size_t width, std::size_t height)
+		: buffer(width * height)
+		, w(width)
+		, h(height)
+	{
+	}
 
+	std::size_t width() const { return w; }
+	std::size_t height() const { return h; }
 	C& operator[](std::size_t idx) { return buffer[idx]; };
     const C& operator[](std::size_t idx) const { return buffer[idx]; };
 };
