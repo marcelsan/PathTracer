@@ -1,10 +1,11 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include <glm/glm.hpp>
-
-#include <vector>
 #include <memory>
+#include <vector>
+#include "object.h"
+
+namespace PathTrace {
 
 class Scene
 {
@@ -12,16 +13,11 @@ private:
 	std::vector<std::unique_ptr<Object>> objects;
 
 public:
+	Scene();
 
-	Scene()
-	{
-	}
-
-	void add(std::unique_ptr<Object> o)
-	{
-		objects.push_back(std::move(o));
-	}
+	void add(std::unique_ptr<Object> o);
 };
 
+}
 
 #endif
