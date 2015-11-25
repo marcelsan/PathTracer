@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(GraphicsComputer C CXX)
+project(PathTracer CXX)
 
 add_subdirectory(src)
