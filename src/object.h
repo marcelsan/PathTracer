@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include "intersection.h"
 
 namespace PathTrace {
 
