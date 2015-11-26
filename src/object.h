@@ -10,6 +10,8 @@ class Object {
 public:
 	Object();
 	virtual ~Object();
+
+    virtual Intersection intersect(const Ray& r) const = 0;
 };
 
 }
