@@ -19,8 +19,8 @@ public:
 	{
 		mat = Material(color, ka, kd, ks, kt, n);
 	};
-	
-	virtual double intersect(const Ray& ray) = 0;
+	virtual ~Object();
+	virtual double intersect(const Ray& ray) const = 0;
 
 private:
 	Material mat;
@@ -44,7 +44,8 @@ public:
 		this->j = j;
 	}
 
-	double intersect(const Ray& ray) {
+
+	double intersect(const Ray& ray) const {
 
 	    double  acoef, bcoef, ccoef; // Intersection coefficents
 	    double  dx, dy, dz; // Direction - origin coordinates
