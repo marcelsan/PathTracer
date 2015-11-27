@@ -16,7 +16,7 @@ public:
 	Object();
 	virtual ~Object();
 	Object(vec3 color, double ka, double kd, double ks, double kt, int n) : color(color), ka(ka), kd(kd), ks(ks), kt(kt), n() {};
-	virtual double intersect(const Ray& ray) = 0;
+	virtual double intersect(const Ray& ray) const = 0;
 
 private:
 	vec3 color;
@@ -42,7 +42,8 @@ public:
 		this->j = j;
 	}
 
-	double intersect(const Ray& ray) {
+
+	double intersect(const Ray& ray) const {
 
 	    double  acoef, bcoef, ccoef; // Intersection coefficents
 	    double  dx, dy, dz; // Direction - origin coordinates
