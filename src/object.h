@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include "ray.h"
+#include "material.h"
 #include "intersection.h"
 
 using namespace glm;
@@ -14,21 +15,23 @@ namespace PathTrace {
 class Object {
 public:
 	Object();
-	Object(vec3 color, double ka, double kd, double ks, double kt, int n) : color(color), ka(ka), kd(kd), ks(ks), kt(kt), n() {};
+	Object(vec3 color, double ka, double kd, double ks, double kt, int n) 
+	{
+		mat = Material(color, ka, kd, ks, kt, n);
+	};
+	
 	virtual double intersect(const Ray& ray) = 0;
 
 private:
-	vec3 color;
-	double ka, kd, ks, kt;
-	int n;
+	Material mat;
 };
 
 class Quadric : public Object {
 public:
 	Quadric();
 	Quadric(double a, double b, double c, double d, double e, double f, double g, double h, double i, double j,
-			vec3 color, double ka, double kd, double ks, double kt, int n) : Object(color, ka, kd, ks, kt, n) {
-
+			vec3 color, double ka, double kd, double ks, double kt, int n) : Object(color, ka, kd, ks, kt, n)
+	{
 		this->a = a;
 		this->b = b;
 		this->c = c;
@@ -101,9 +104,9 @@ public:
 		const double y = point[1];
 		const double z = point[2];
 
-		double gradx = 2 * a * x + d * y + e * z + g;
-		double grady = 2 * b * y + d * x + f * z + h;
-		double gradz = 2 * c * z + e * x + f * y + i;
+		float gradx = 2 * a * x + d * y + e * z + g;
+		float grady = 2 * b * y + d * x + f * z + h;
+		float gradz = 2 * c * z + e * x + f * y + i;
 
 		return vec3(gradx, grady, gradz);
 	}
