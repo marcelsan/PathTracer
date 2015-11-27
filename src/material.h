@@ -10,11 +10,11 @@ class Material {
 
 public:
 	Material();
-	Material(vec3 color, double ka, double kd, double ks, double kt, int n) : color(color), ka(ka), kd(kd), ks(ks), kt(kt), n(n) {};
+	Material(vec3 color, float ka, float kd, float ks, float kt, int n) : color(color), ka(ka), kd(kd), ks(ks), kt(kt), n(n) {};
 
 private:
 	vec3 color;
-	double ka, kd, ks, kt;
+	float ka, kd, ks, kt;
 	int n;
 
 };

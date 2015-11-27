@@ -20,7 +20,7 @@ public:
 		mat = Material(color, ka, kd, ks, kt, n);
 	};
 	virtual ~Object();
-	virtual double intersect(const Ray& ray) const = 0;
+	virtual Intersection intersect(const Ray& ray) const = 0;
 
 private:
 	Material mat;
@@ -29,8 +29,8 @@ private:
 class Quadric : public Object {
 public:
 	Quadric();
-	Quadric(double a, double b, double c, double d, double e, double f, double g, double h, double i, double j,
-			vec3 color, double ka, double kd, double ks, double kt, int n) : Object(color, ka, kd, ks, kt, n)
+	Quadric(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j,
+			vec3 color, float ka, float kd, float ks, float kt, int n) : Object(color, ka, kd, ks, kt, n)
 	{
 		this->a = a;
 		this->b = b;
@@ -44,23 +44,22 @@ public:
 		this->j = j;
 	}
 
+	Intersection intersect(const Ray& ray) const {
 
-	double intersect(const Ray& ray) const {
+	    float  acoef, bcoef, ccoef; // Intersection coefficents
+	    float  dx, dy, dz; // Direction - origin coordinates
+	    float  disc; // Distance to intersection
+	    float  root; // Root of distance to intersection
+	    float  t; // Distance along ray to intersection
+	    float  x0, y0, z0; // Origin coordinates
 
-	    double  acoef, bcoef, ccoef; // Intersection coefficents
-	    double  dx, dy, dz; // Direction - origin coordinates
-	    double  disc; // Distance to intersection
-	    double  root; // Root of distance to intersection
-	    double  t; // Distance along ray to intersection
-	    double  x0, y0, z0; // Origin coordinates
+	    dx = ray.d.x;
+	    dy = ray.d.y;
+	    dz = ray.d.z;
 
-	    dx = ray.d[0] - ray.o[0];
-	    dy = ray.d[1] - ray.o[1];
-	    dz = ray.d[2] - ray.o[2];
-
-	    x0 = ray.o[0];
-	    y0 = ray.o[1];
-	    z0 = ray.o[2];
+	    x0 = ray.o.x;
+	    y0 = ray.o.y;
+	    z0 = ray.o.z;
 
 	 	// Ax2 + By2 + Cz2 + Dxy+ Exz + Fyz + Gx + Hy + Iz + J = 0
 
@@ -74,15 +73,15 @@ public:
 
 	    if ( 1.0 + acoef == 1.0 ) {
 	        if ( 1.0 + bcoef == 1.0 ) {
-	            return -1.0;
+	            return {};
 	        }
 
-	      t = ( -ccoef ) / ( bcoef );
+	      	t = ( -ccoef ) / ( bcoef );
 
 	    } else {
-	        disc = bcoef * bcoef - 4 * acoef * ccoef;
+	        disc = bcoef * bcoef - 4 * acoef * ccoef;  
 	      	if ( 1.0 + disc < 1.0 ) {
-	         	return -1.0;
+	         	return {};
 	      	}
 
 		    root = sqrt( disc );
@@ -93,17 +92,19 @@ public:
 	    }
 
 	    if (t < 0.001) {
-	    	return -1.0;
-	    }
+	    	return {};
+	    }							
 
-	   return t;
+	    vec3 p(x0 + t * dx, y0 + t * dy, z0 + t * dz);
+
+	   	return {p, normal(p)};
 	}
 
-	const vec3 getNormal(vec3 point) const {
+	const vec3 normal(vec3 point) const {
 		
-		const double x = point.x;
-		const double y = point.y;
-		const double z = point.z;
+		const float x = point.x;
+		const float y = point.y;
+		const float z = point.z;
 
 		float gradx = 2 * a * x + d * y + e * z + g;
 		float grady = 2 * b * y + d * x + f * z + h;
@@ -113,8 +114,8 @@ public:
 	}
 
 private:
-	double  a, b, c, d, e; // Coefficents of equation of..
-   	double  f, g, h, i, j; // ... quadric surface
+	float  a, b, c, d, e; // Coefficents of equation of..
+   	float  f, g, h, i, j; // ... quadric surface
 };
 
 }
