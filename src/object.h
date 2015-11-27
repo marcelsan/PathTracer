@@ -28,7 +28,7 @@ private:
 
 class Quadric : public Object {
 public:
-	Quadric();
+	Quadric() {}
 	Quadric(double a, double b, double c, double d, double e, double f, double g, double h, double i, double j,
 			vec3 color, double ka, double kd, double ks, double kt, int n) : Object(color, ka, kd, ks, kt, n)
 	{
@@ -44,6 +44,7 @@ public:
 		this->j = j;
 	}
 
+	virtual ~Quadric() {}
 
 	double intersect(const Ray& ray) const {
 
@@ -100,7 +101,6 @@ public:
 	}
 
 	const vec3 getNormal(vec3 point) const {
-		
 		const double x = point.x;
 		const double y = point.y;
 		const double z = point.z;
