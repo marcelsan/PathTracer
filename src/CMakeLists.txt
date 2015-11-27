@@ -5,6 +5,7 @@ set(pathtracer_SRCS
 	imagebuffer.cpp
 	object.cpp
 	scene.cpp
+	material.cpp
 	main.cpp
 )
 

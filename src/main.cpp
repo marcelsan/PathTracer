@@ -21,8 +21,10 @@ int main(int argc, char const *argv[])
 	color g(0, 1, 0);
 	color b(0, 0, 1);
 
-	Quadric q(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, vec3(1,0,0), 10.0, 1.0, 1.0, 1.0, 1);
-	q.getNormal();
+	Quadric q(1, 1, 1, 0, 0, 0, 0, 0, 0, -1, vec3(1,0,0), 10.0, 1.0, 1.0, 1.0, 1);
+	vec3 normal = q.getNormal(vec3(1,0,0));
+
+	std::cout << normal.x << "-" << normal.y << "-" << normal.z << std::endl;
 
 	Scene s;
 	ImageBuffer<color> ib(100, 100);

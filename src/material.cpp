@@ -4,7 +4,6 @@ namespace PathTrace {
 
 Material::Material() 
 {
-
 }
 
 }

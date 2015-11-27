@@ -100,9 +100,9 @@ public:
 
 	const vec3 getNormal(vec3 point) const {
 		
-		const double x = point[0];
-		const double y = point[1];
-		const double z = point[2];
+		const double x = point.x;
+		const double y = point.y;
+		const double z = point.z;
 
 		float gradx = 2 * a * x + d * y + e * z + g;
 		float grady = 2 * b * y + d * x + f * z + h;
