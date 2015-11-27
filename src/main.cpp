@@ -5,7 +5,7 @@
 #include "object.h"
 #include "imagebuffer.h"
 #include "color.h"
-#include <iostream>
+#include <memory>
 
 using namespace glm;
 using namespace PathTrace;
@@ -20,9 +20,8 @@ int main(int argc, char const *argv[])
 	color g(0, 1, 0);
 	color b(0, 0, 1);
 
-	Quadric q(1,2,3,4,5,6,7,8,9,0,vec3(1,0,0), 10.0, 1.0, 1.0, 1.0, 1);
-
 	Scene s;
+	s.add(std::unique_ptr<Object>(new Quadric(10,2,3,4,5,6,7,8,9,0, vec3(1,0,0), 10.0, 1.0, 1.0, 1.0, 1)));
 
 	ImageBuffer<color> ib(100, 100);
 
