@@ -14,6 +14,7 @@ namespace PathTrace {
 class Object {
 public:
 	Object();
+	virtual ~Object();
 	Object(vec3 color, double ka, double kd, double ks, double kt, int n) : color(color), ka(ka), kd(kd), ks(ks), kt(kt), n() {};
 	virtual double intersect(const Ray& ray) = 0;
 

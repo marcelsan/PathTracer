@@ -6,4 +6,8 @@ Object::Object()
 {
 }
 
+Object::~Object()
+{
+}
+
 }
