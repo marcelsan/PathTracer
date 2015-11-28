@@ -110,7 +110,7 @@ public:
 		float grady = 2 * b * y + d * x + f * z + h;
 		float gradz = 2 * c * z + e * x + f * y + i;
 
-		return vec3(gradx, grady, gradz);
+		return normalize(vec3(gradx, grady, gradz));
 	}
 
 private:

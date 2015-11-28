@@ -8,7 +8,6 @@
 class LightScheme
 {
 	private:
-		unsigned selectedLight;
 		float ambientIntensity;
 		Color ambientColor;
 		std::vector<Light> lights;
@@ -51,21 +50,6 @@ class LightScheme
 			return lights;
 		}
 
-		void nextLight()
-		{
-			if((this->selectedLight + 1) < (int)lights.size())
-				this->selectedLight++;
-			else
-				this->selectedLight = 0;
-		}
-
-		void previousLight()
-		{
-			if((this->selectedLight - 1) > 0)
-				this->selectedLight--;
-			else
-				this->selectedLight = (lights.size() - 1);
-		}
 };
 
 #endif 
