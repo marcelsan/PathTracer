@@ -42,7 +42,9 @@ public:
 		this->h = h;
 		this->i = i;
 		this->j = j;
-	}
+	};
+	
+	virtual ~Quadric() {}
 
 	Intersection intersect(const Ray& ray) const {
 
