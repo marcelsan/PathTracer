@@ -9,6 +9,7 @@
 #include "imagebuffer.h"
 #include "color.h"
 #include "filesystemutil.h"
+#include "quadric.h"
 
 using namespace glm;
 using namespace PathTrace;

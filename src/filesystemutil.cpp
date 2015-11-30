@@ -4,6 +4,7 @@
 #include <fstream>
 #include "camera.h"
 #include "object.h"
+#include "quadric.h"
 
 using namespace PathTrace;
 

@@ -7,6 +7,7 @@ set(pathtracer_SRCS
     filesystemutil.cpp
 	imagebuffer.cpp
 	object.cpp
+    quadric.cpp
 	scene.cpp
 	material.cpp
 	main.cpp
