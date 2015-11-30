@@ -16,14 +16,4 @@ Material::Material(vec3 color, float ka, float kd, float ks, float kt, int n)
 {
 }
 
-Material::Material(vec3 color, float ka, float kd, float ks, float kt, int n)
-    : color(color)
-    , ka(ka)
-    , kd(kd)
-    , ks(ks)
-    , kt(kt)
-    , n(n)
-{
-}
-
 }
