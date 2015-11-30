@@ -20,7 +20,7 @@ namespace FileSystemUtil
             if (!stream.is_open())
             {
                 std::cout << "ERROR: file not loaded: " << url.c_str() << std::endl;
-                exit(0);
+                exit(-1);
             }
         }
     }
