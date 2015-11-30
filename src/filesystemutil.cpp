@@ -1,0 +1,70 @@
+#include "filesystemutil.h"
+
+#include "camera.h"
+#include "object.h"
+
+using namespace PathTrace;
+
+namespace FileSystemUtil {
+
+inline static void load(const std::string& url, std::ifstream& stream)
+{
+    if (url == "")
+        return;
+
+    stream.open(url.c_str());
+    if (!stream.is_open()) {
+        std::cout << "ERROR: file not loaded: " << url.c_str() << std::endl;
+        exit(-1);
+    }
+}
+
+inline static void readQuadric(const std::string& line, Scene& s)
+{
+    float a, b, c, d, e, f, g, h, j, k, red, green, blue, ka, kd, ks, kt;
+    int n;
+
+    sscanf(line.c_str(), 
+        "%*s %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %d",
+        &a, &b, &c, &d, &e, &f, &g, &h, &j, &k, &red, &green, &blue, &ka, &kd, &ks, &kt, &n);
+
+    Material mat(vec3(red,green,blue), ka, kd, ks, kt, n);
+    s.add(std::unique_ptr<Object>(new Quadric(a,b,c,d,e,f,g,h,j,k,mat)));
+}
+
+inline static void readEye(const std::string& line, Scene& s)
+{
+    float x, y, z;
+    sscanf(line.c_str(), "%*s %f %f %f", &x, &y, &z);
+
+    Camera cam(vec3(x, y , z));
+    s.setCamera(cam);
+}
+
+void readSDLFile(const std::string& path, PathTrace::Scene& s)
+{
+    std::ifstream stream;
+    std::string line;
+
+    load(path, stream);
+
+    while(!stream.eof()) {
+        getline(stream, line);
+
+        if(line[0] != '#') {
+            if (line.find("objectquadric") != std::string::npos) {
+                readQuadric(line, s);
+            } 
+            else if (line.find("background") != std::string::npos) {
+                // TODO
+            }
+            else if (line.find("eye") != std::string::npos) {
+                readEye(line, s);
+            } 
+        }
+    }
+
+    stream.close();
+}
+
+}
