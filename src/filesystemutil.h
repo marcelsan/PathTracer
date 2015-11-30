@@ -14,7 +14,7 @@ namespace FileSystemUtil
 {
     inline static void load(const std::string& url, std::ifstream& stream)
     {
-        if (strcmp(url.c_str(), "") != 0)
+        if (url != "")
         {
             stream.open(url.c_str());
             if (!stream.is_open())
