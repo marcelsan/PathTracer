@@ -15,10 +15,7 @@ namespace PathTrace {
 class Object {
 public:
 	Object();
-	Object(vec3 color, double ka, double kd, double ks, double kt, int n) 
-	{
-		mat = Material(color, ka, kd, ks, kt, n);
-	};
+	Object(const Material& m);
 	virtual ~Object();
 	virtual Intersection intersect(const Ray& ray) const = 0;
 
@@ -30,7 +27,7 @@ class Quadric : public Object {
 public:
 	Quadric();
 	Quadric(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j,
-			vec3 color, float ka, float kd, float ks, float kt, int n) : Object(color, ka, kd, ks, kt, n)
+			const Material& m) : Object(m)
 	{
 		this->a = a;
 		this->b = b;

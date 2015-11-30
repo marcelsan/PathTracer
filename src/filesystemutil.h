@@ -45,7 +45,8 @@ namespace FileSystemUtil
                            "%*s %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %d",
                            &a, &b, &c, &d, &e, &f, &g, &h, &j, &k, &red, &green, &blue, &ka, &kd, &ks, &kt, &n);
 
-                    s.add(std::unique_ptr<Object>(new Quadric(a,b,c,d,e,f,g,h,j,k, vec3(red,green,blue), ka, kd, ks, kt, n)));
+                    Material mat(vec3(red,green,blue), ka, kd, ks, kt, n);
+                    s.add(std::unique_ptr<Object>(new Quadric(a,b,c,d,e,f,g,h,j,k,mat)));
                 } 
                 else if (line.find("background") != std::string::npos) {
 
