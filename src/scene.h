@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include "camera.h"
 #include "object.h"
 
 using namespace glm;
@@ -13,13 +14,13 @@ class Scene
 {
 private:
 	std::vector<std::unique_ptr<Object>> objects;
-    vec3 eyePosition;
+    Camera cam;
 
 public:
 	Scene();
 
 	void add(std::unique_ptr<Object> o);
-    void setEyePosition(float x, float y, float z);
+    void setCamera(const Camera& cam);
 };
 
 }

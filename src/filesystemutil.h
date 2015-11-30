@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <memory>
 
+#include "camera.h"
 #include "object.h"
 
 using namespace PathTrace;
@@ -51,9 +52,10 @@ namespace FileSystemUtil
                 }
                 else if (line.find("eye") != std::string::npos) {
                     float x, y, z;
-
                     sscanf(line.c_str(), "%*s %f %f %f", &x, &y, &z);
-                    s.setEyePosition(x, y, z);
+
+                    Camera cam(vec3(x, y , z));
+                    s.setCamera(cam);
                 } 
             }
         }

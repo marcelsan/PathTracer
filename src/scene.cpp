@@ -12,10 +12,8 @@ void Scene::add(std::unique_ptr<Object> o)
 	objects.push_back(std::move(o));
 }
 
-void Scene::setEyePosition(float x, float y, float z)
+void Scene::setCamera(const Camera &c)
 {
-    eyePosition.x = x;
-    eyePosition.y = y;
-    eyePosition.z = z;
+    cam = c;
 }
 }
