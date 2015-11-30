@@ -23,19 +23,24 @@ inline static void load(const std::string& url, std::ifstream& stream)
     }
 }
 
-inline static void readQuadric(std::istream& stream, Scene& s)
+inline static Material readMaterial(std::istream& stream)
 {
-    float a, b, c, d, e, f, g, h, j, k;
     float red, green, blue;
     float ka, kd, ks, kt;
     int n;
 
-    stream >> a >> b >> c >> d >> e >> f >> g >> h >> j >> k;
     stream >> red >> green >> blue;
     stream >> ka >> kd >> ks >> kt;
     stream >> n;
 
-    Material mat(vec3(red,green,blue), ka, kd, ks, kt, n);
+    return Material(vec3(red,green,blue), ka, kd, ks, kt, n);
+}
+
+inline static void readQuadric(std::istream& stream, Scene& s)
+{
+    float a, b, c, d, e, f, g, h, j, k;
+    stream >> a >> b >> c >> d >> e >> f >> g >> h >> j >> k;
+    Material mat = readMaterial(stream);
     s.add(std::unique_ptr<Object>(new Quadric(a,b,c,d,e,f,g,h,j,k,mat)));
 }
 
