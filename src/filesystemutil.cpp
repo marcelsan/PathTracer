@@ -1,5 +1,7 @@
 #include "filesystemutil.h"
 
+#include <iostream>
+#include <fstream>
 #include "camera.h"
 #include "object.h"
 
@@ -14,29 +16,31 @@ inline static void load(const std::string& url, std::ifstream& stream)
 
     stream.open(url.c_str());
     if (!stream.is_open()) {
-        std::cout << "ERROR: file not loaded: " << url.c_str() << std::endl;
+        std::cerr << "ERROR: file not loaded: " << url.c_str() << std::endl;
         exit(-1);
     }
 }
 
-inline static void readQuadric(const std::string& line, Scene& s)
+inline static void readQuadric(std::istream& stream, Scene& s)
 {
-    float a, b, c, d, e, f, g, h, j, k, red, green, blue, ka, kd, ks, kt;
+    float a, b, c, d, e, f, g, h, j, k;
+    float red, green, blue;
+    float ka, kd, ks, kt;
     int n;
 
-    sscanf(line.c_str(), 
-        "%*s %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %d",
-        &a, &b, &c, &d, &e, &f, &g, &h, &j, &k, &red, &green, &blue, &ka, &kd, &ks, &kt, &n);
+    stream >> a >> b >> c >> d >> e >> f >> g >> h >> j >> k;
+    stream >> red >> green >> blue;
+    stream >> ka >> kd >> ks >> kt;
+    stream >> n;
 
     Material mat(vec3(red,green,blue), ka, kd, ks, kt, n);
     s.add(std::unique_ptr<Object>(new Quadric(a,b,c,d,e,f,g,h,j,k,mat)));
 }
 
-inline static void readEye(const std::string& line, Scene& s)
+inline static void readEye(std::istream& stream, Scene& s)
 {
     float x, y, z;
-    sscanf(line.c_str(), "%*s %f %f %f", &x, &y, &z);
-
+    stream >> x >> y >> z;
     Camera cam(vec3(x, y , z));
     s.setCamera(cam);
 }
@@ -49,19 +53,23 @@ void readSDLFile(const std::string& path, PathTrace::Scene& s)
     load(path, stream);
 
     while(!stream.eof()) {
-        getline(stream, line);
+        std::string option;
+        stream >> option;
 
-        if(line[0] != '#') {
-            if (line.find("objectquadric") != std::string::npos) {
-                readQuadric(line, s);
-            } 
-            else if (line.find("background") != std::string::npos) {
-                // TODO
-            }
-            else if (line.find("eye") != std::string::npos) {
-                readEye(line, s);
-            } 
+        if (option == "#") {
+            // TODO: read until next line
+            continue;
         }
+
+        if (option == "objectquadric") {
+            readQuadric(stream, s);
+        } 
+        else if (option == "background") {
+            // TODO
+        }
+        else if (option ==  "eye") {
+            readEye(stream, s);
+        } 
     }
 
     stream.close();
