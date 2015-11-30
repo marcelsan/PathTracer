@@ -23,17 +23,22 @@ inline static void load(const std::string& url, std::ifstream& stream)
     }
 }
 
+inline static std::istream& operator>>(std::istream& stream, vec3& v)
+{
+    return stream >> v.x >> v.y >> v.z;
+}
+
 inline static Material readMaterial(std::istream& stream)
 {
-    float red, green, blue;
+    vec3 color;
     float ka, kd, ks, kt;
     int n;
 
-    stream >> red >> green >> blue;
+    stream >> color;
     stream >> ka >> kd >> ks >> kt;
     stream >> n;
 
-    return Material(vec3(red,green,blue), ka, kd, ks, kt, n);
+    return Material(color, ka, kd, ks, kt, n);
 }
 
 inline static void readQuadric(std::istream& stream, Scene& s)
@@ -46,9 +51,9 @@ inline static void readQuadric(std::istream& stream, Scene& s)
 
 inline static void readEye(std::istream& stream, Scene& s)
 {
-    float x, y, z;
-    stream >> x >> y >> z;
-    Camera cam(vec3(x, y , z));
+    vec3 eye;
+    stream >> eye;
+    Camera cam(eye);
     s.setCamera(cam);
 }
 
