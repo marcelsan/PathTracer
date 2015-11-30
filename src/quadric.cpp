@@ -8,7 +8,7 @@ Quadric::Quadric()
 }
 
 Quadric::Quadric(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j,
-            const Material& m) : Object(m)
+                 const Material& m) : Object(m)
 {
     this->a = a;
     this->b = b;
@@ -21,7 +21,7 @@ Quadric::Quadric(float a, float b, float c, float d, float e, float f, float g, 
     this->i = i;
     this->j = j;
 };
-    
+
 Quadric::~Quadric()
 {
 }
@@ -45,37 +45,49 @@ Intersection Quadric::intersect(const Ray& ray) const
 
      // Ax2 + By2 + Cz2 + Dxy+ Exz + Fyz + Gx + Hy + Iz + J = 0
 
-    acoef = a * dx * dx + b * dy * dy + c * dz * dz + d * dx * dy + e * dx * dz + f * dy * dz;
+    acoef = a * dx * dx +
+            b * dy * dy +
+            c * dz * dz +
+            d * dx * dy +
+            e * dx * dz +
+            f * dy * dz;
 
-    bcoef = 2 * a * x0 * dx + 2 * b * y0 * dy + 2 * c * z0 * dz + d * (x0 * dy + y0 * dx) + 
-            e * (x0 * dz + z0 * dx) + f * (y0 * dz + dy * z0) + g * dx + h * dy + i * dz;
+    bcoef = 2 * a * x0 * dx +
+            2 * b * y0 * dy +
+            2 * c * z0 * dz +
+            d * (x0 * dy + y0 * dx) +
+            e * (x0 * dz + z0 * dx) +
+            f * (y0 * dz + dy * z0) +
+            g * dx +
+            h * dy +
+            i * dz;
 
-    ccoef = a * x0 * x0 + b * y0 * y0 + c * z0 * z0 + d * x0 * y0 + e * x0 * z0 + f * y0 * z0 + g * x0 +
-            h * y0 + i * z0 + j;
+    ccoef = a * x0 * x0 +
+            b * y0 * y0 +
+            c * z0 * z0 +
+            d * x0 * y0 +
+            e * x0 * z0 +
+            f * y0 * z0 +
+            g * x0 +
+            h * y0 +
+            i * z0 + j;
 
     if ( 1.0 + acoef == 1.0 ) {
-        if ( 1.0 + bcoef == 1.0 ) {
+        if ( 1.0 + bcoef == 1.0 )
             return {};
-        }
-
-          t = ( -ccoef ) / ( bcoef );
-
+        t = ( -ccoef ) / ( bcoef );
     } else {
-        disc = bcoef * bcoef - 4 * acoef * ccoef;  
-          if ( 1.0 + disc < 1.0 ) {
-             return {};
-          }
-
+        disc = bcoef * bcoef - 4 * acoef * ccoef;
+        if ( 1.0 + disc < 1.0 )
+            return {};
         root = sqrt( disc );
         t = ( -bcoef - root ) / ( acoef + acoef );
-        if ( t < 0.0 ) {
+        if ( t < 0.0 )
             t = ( -bcoef + root ) / ( acoef + acoef );
-        }
     }
 
-    if (t < 0.001) {
+    if (t < 0.001)
         return {};
-    }                            
 
     vec3 p(x0 + t * dx, y0 + t * dy, z0 + t * dz);
 
