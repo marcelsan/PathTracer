@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include "camera.h"
 #include "object.h"
 #include "quadric.h"
@@ -49,27 +50,28 @@ inline static void readEye(std::istream& stream, Scene& s)
 void readSDLFile(const std::string& path, PathTrace::Scene& s)
 {
     std::ifstream stream;
-    std::string line;
-
     load(path, stream);
-
     while(!stream.eof()) {
-        std::string option;
-        stream >> option;
+        std::string line;
+        std::getline(stream, line);
+        std::stringstream ss(line);
 
-        if (option == "#") {
+        std::string option;
+        ss >> option;
+
+        if (option[0] == '#') {
             // TODO: read until next line
             continue;
         }
 
         if (option == "objectquadric") {
-            readQuadric(stream, s);
+            readQuadric(ss, s);
         } 
         else if (option == "background") {
             // TODO
         }
         else if (option ==  "eye") {
-            readEye(stream, s);
+            readEye(ss, s);
         } 
     }
 
