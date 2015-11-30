@@ -43,7 +43,7 @@ public:
 		this->i = i;
 		this->j = j;
 	};
-	
+
 	virtual ~Quadric() {}
 
 	Intersection intersect(const Ray& ray) const {
@@ -118,6 +118,53 @@ public:
 private:
 	float  a, b, c, d, e; // Coefficents of equation of..
    	float  f, g, h, i, j; // ... quadric surface
+};
+
+class Mesh : public Object
+{
+private:
+	std::vector<float> vertices;
+	std::vector<float> normals; 
+	std::vector<unsigned int> indices;
+	std::vector<unsigned int> normalIndices;
+
+	void resetObject()
+	{
+		this->vertices.clear();
+		this->indices.clear();
+		this->normalIndices.clear();
+		this->normals.clear();
+	}
+
+public:
+	Mesh(vec3 color, float ka, float kd, float ks, float kt, int n) : Object(color, ka, kd, ks, kt, n) {};
+
+	// ToDO
+	Intersection intersect(const Ray& ray) const
+	{
+		return {};
+	}
+
+	void addVertex(vec3 vertex)
+	{
+		vertices.push_back(vertex.x);
+		vertices.push_back(vertex.y);
+		vertices.push_back(vertex.z);
+	}
+
+	void addNormals(vec3 normal)
+	{
+		normals.push_back(normal.x);
+		normals.push_back(normal.y);
+		normals.push_back(normal.z);
+	}
+
+	void addTriangleIndices(int a, int b, int c)
+	{
+		indices.push_back(a);
+		indices.push_back(b);
+		indices.push_back(c);
+	}
 };
 
 }
