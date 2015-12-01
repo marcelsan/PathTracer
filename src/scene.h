@@ -13,13 +13,13 @@ namespace PathTrace {
 class Scene
 {
 private:
-	std::vector<std::unique_ptr<Object>> objects;
+    std::vector<std::unique_ptr<Object>> objects;
     Camera cam;
 
 public:
-	Scene();
+    Scene();
 
-	void add(std::unique_ptr<Object> o);
+    void add(std::unique_ptr<Object> o);
     void setCamera(const Camera& cam);
 
     bool raycast(const Ray& ray, Intersection& inter) const;
