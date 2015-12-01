@@ -9,20 +9,25 @@ namespace PathTrace {
 
 class Mesh : public Object
 {
+    struct Triangle {
+        unsigned int a, b, c;
+    };
+
+    struct Vertex {
+        vec3 pos, normal;
+    };
+
 private:
-    std::vector<float> vertices;
-    std::vector<float> normals; 
-    std::vector<unsigned int> indices;
-    std::vector<unsigned int> normalIndices;
+    std::vector<Vertex> vertices;
+    std::vector<Triangle> triangles;
 
 public:
     Mesh();
     Mesh(const Material& m);
     virtual ~Mesh();
     Intersection intersect(const Ray& ray) const;
-    void addVertex(vec3 vertex);
-    void addNormals(vec3 normal);
-    void addTriangleIndices(int a, int b, int c);
+    void addVertex(vec3 vertex, vec3 normal = {});
+    void addTriangle(unsigned int a, unsigned int b, unsigned int c);
     void resetObject();
 
 };

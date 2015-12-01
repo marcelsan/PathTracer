@@ -46,15 +46,16 @@ inline void readOBJFile(const std::string& url, PathTrace::Mesh* m)
             continue;
         }
 
-        if(option[0] == 'v') {
+        if (option[0] == 'v') {
             float x, y, z;
             ss >> x >> y >> z;
             m->addVertex(vec3(x, y, z));
-        }
-        else if(option[0] == 'f') {
+        } else if (option[0] == 'n') {
+            // TODO
+        } else if(option[0] == 'f') {
             int a, b, c;
             ss >> a >> b >> c;
-            m->addTriangleIndices(a, b, c);
+            m->addTriangle(a, b, c);
         }
     }
 }
