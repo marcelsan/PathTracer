@@ -3,28 +3,41 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <string>
+#include "quadric.h"
 #include "camera.h"
 #include "object.h"
-#include "quadric.h"
+#include "mesh.h"
+#include "defines.h"
 
 using namespace PathTrace;
 
 namespace FileSystemUtil {
 
-void readOBJFile(const std::string& url, Mesh& m) 
+inline static void load(const std::string& url, std::ifstream& stream)
+{
+    if (url == "")
+        return;
+
+    stream.open(url.c_str());
+    if (!stream.is_open()) {
+        std::cerr << "ERROR: file not loaded: " << url.c_str() << std::endl;
+        exit(-1);
+    }
+}
+
+inline void readOBJFile(const std::string& url, PathTrace::Mesh* m) 
 {
     if(url == "")
         return;
 
     std::ifstream stream;
-    load(path, stream);
+    load(url, stream);
 
     // ToDO: consider more general types of obj files
 
     while(!stream.eof()) {
         std::string line;
-        std::string option
+        std::string option;
         getline(stream, line);
         std::stringstream ss(line);
 
@@ -37,25 +50,13 @@ void readOBJFile(const std::string& url, Mesh& m)
         if(option[0] == 'v') {
             float x, y, z;
             ss >> x >> y >> z;
-            m.addVertex(vec3(x, y, z));
+            m->addVertex(vec3(x, y, z));
         }
         else if(option[0] == 'f') {
             int a, b, c;
             ss >> a >> b >> c;
-            m.addTriangleIndices(a, b, c);
+            m->addTriangleIndices(a, b, c);
         }
-    }
-}
-
-inline static void load(const std::string& url, std::ifstream& stream)
-{
-    if (url == "")
-        return;
-
-    stream.open(url.c_str());
-    if (!stream.is_open()) {
-        std::cerr << "ERROR: file not loaded: " << url.c_str() << std::endl;
-        exit(-1);
     }
 }
 
@@ -100,7 +101,7 @@ inline static void readMesh(std::istream& stream, Scene& s)
     float ka, kd, ks, kt;
     int n;
 
-    stream >> objFilePath;
+    stream >> objFile;
     stream >> color;
     stream >> ka >> kd >> ks >> kt;
     stream >> n;
@@ -108,7 +109,8 @@ inline static void readMesh(std::istream& stream, Scene& s)
     Material mat(color, ka, kd, ks, kt, n);
     Mesh* m = new Mesh(mat);
 
-    readOBJFile(objFilePath, m);
+    readOBJFile(DATA_PATH + objFile, m);
+    s.add(std::unique_ptr<Object>(m));
 }
 
 static void readSDLFile(const std::string& path, PathTrace::Scene& s)

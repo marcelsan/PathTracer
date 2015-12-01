@@ -17,7 +17,7 @@ Mesh::~Mesh()
 
 }
 
-Intersection Quadric::intersect(const Ray& ray) const 
+Intersection Mesh::intersect(const Ray& ray) const 
 {
     // ToDO: implement intersection with mesh
 

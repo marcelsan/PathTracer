@@ -2,15 +2,15 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
 set(pathtracer_SRCS
+    object.cpp
+    quadric.cpp
     box.cpp
     camera.cpp
-    filesystemutil.cpp
 	imagebuffer.cpp
-	object.cpp
-    quadric.cpp
     mesh.cpp
 	scene.cpp
 	material.cpp
+    filesystemutil.cpp
 	main.cpp
 )
 

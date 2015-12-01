@@ -7,7 +7,8 @@ Quadric::Quadric()
 {
 }
 
-Quadric::Quadric(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j,
+Quadric::Quadric(float a, float b, float c, float d, float e, 
+                 float f, float g, float h, float i, float j,
                  const Material& m) : Object(m)
 {
     this->a = a;
