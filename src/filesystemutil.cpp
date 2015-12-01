@@ -89,7 +89,8 @@ inline static void readQuadric(std::istream& stream, Scene& s)
 inline static void readEye(std::istream& stream, Camera& cam)
 {
     vec3 eye;
-    stream >> cam.eye;
+    stream >> eye;
+    cam.setEye(eye);
 }
 
 inline static void readMesh(std::istream& stream, Scene& s)
