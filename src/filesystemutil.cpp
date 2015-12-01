@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <string>
 #include "camera.h"
 #include "object.h"
 #include "quadric.h"
@@ -10,6 +11,41 @@
 using namespace PathTrace;
 
 namespace FileSystemUtil {
+
+void readOBJFile(const std::string& url, Mesh& m) 
+{
+    if(url == "")
+        return;
+
+    std::ifstream stream;
+    load(path, stream);
+
+    // ToDO: consider more general types of obj files
+
+    while(!stream.eof()) {
+        std::string line;
+        std::string option
+        getline(stream, line);
+        std::stringstream ss(line);
+
+        ss >> option;
+
+        if(option[0] == '#') {
+            continue;
+        }
+
+        if(option[0] == 'v') {
+            float x, y, z;
+            ss >> x >> y >> z;
+            m.addVertex(vec3(x, y, z));
+        }
+        else if(option[0] == 'f') {
+            int a, b, c;
+            ss >> a >> b >> c;
+            m.addTriangleIndices(a, b, c);
+        }
+    }
+}
 
 inline static void load(const std::string& url, std::ifstream& stream)
 {
@@ -57,10 +93,29 @@ inline static void readEye(std::istream& stream, Scene& s)
     s.setCamera(cam);
 }
 
-void readSDLFile(const std::string& path, PathTrace::Scene& s)
+inline static void readMesh(std::istream& stream, Scene& s)
+{
+    std::string objFile;
+    vec3 color;
+    float ka, kd, ks, kt;
+    int n;
+
+    stream >> objFilePath;
+    stream >> color;
+    stream >> ka >> kd >> ks >> kt;
+    stream >> n;
+
+    Material mat(color, ka, kd, ks, kt, n);
+    Mesh* m = new Mesh(mat);
+
+    readOBJFile(objFilePath, m);
+}
+
+static void readSDLFile(const std::string& path, PathTrace::Scene& s)
 {
     std::ifstream stream;
     load(path, stream);
+
     while(!stream.eof()) {
         std::string line;
         std::getline(stream, line);
@@ -82,7 +137,10 @@ void readSDLFile(const std::string& path, PathTrace::Scene& s)
         }
         else if (option ==  "eye") {
             readEye(ss, s);
-        } 
+        }
+        else if (option == "object") {
+            readMesh(ss, s);
+        }
     }
 
     stream.close();
