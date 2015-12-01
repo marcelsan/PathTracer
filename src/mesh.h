@@ -1,5 +1,5 @@
-#ifndef QUADRIC_H
-#define QUADRIC_H
+#ifndef MESH_H
+#define MESH_H
 
 #include "object.h"
 

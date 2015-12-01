@@ -27,7 +27,10 @@ int main(int argc, char const *argv[])
 
 	Scene s;
 
-	FileSystemUtil::readSDLFile(DATA_PATH + "test.sdl", s);
+	if (argc < 2)
+		exit(-1);
+
+	FileSystemUtil::readSDLFile(std::string(argv[1]), s);
 
 	Material mat(vec3(1,0,0), 10.0, 1.0, 1.0, 1.0, 1);
 	s.add(std::unique_ptr<Object>(new Quadric(10,2,3,4,5,6,7,8,9,0, mat)));

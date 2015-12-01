@@ -7,7 +7,6 @@
 #include "camera.h"
 #include "object.h"
 #include "mesh.h"
-#include "defines.h"
 
 using namespace PathTrace;
 
@@ -109,11 +108,11 @@ inline static void readMesh(std::istream& stream, Scene& s)
     Material mat(color, ka, kd, ks, kt, n);
     Mesh* m = new Mesh(mat);
 
-    readOBJFile(DATA_PATH + objFile, m);
+    readOBJFile(objFile, m);
     s.add(std::unique_ptr<Object>(m));
 }
 
-static void readSDLFile(const std::string& path, PathTrace::Scene& s)
+void readSDLFile(const std::string& path, PathTrace::Scene& s)
 {
     std::ifstream stream;
     load(path, stream);
