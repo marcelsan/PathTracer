@@ -10,7 +10,6 @@
 #include "color.h"
 #include "filesystemutil.h"
 #include "quadric.h"
-#include "defines.h"
 
 using namespace glm;
 using namespace PathTrace;
@@ -30,7 +29,8 @@ int main(int argc, char const *argv[])
 	if (argc < 2)
 		exit(-1);
 
-	FileSystemUtil::readSDLFile(std::string(argv[1]), s);
+	std::string path(argv[1]);
+	FileSystemUtil::readSDLFile(path, s);
 
 	Material mat(vec3(1,0,0), 10.0, 1.0, 1.0, 1.0, 1);
 	s.add(std::unique_ptr<Object>(new Quadric(10,2,3,4,5,6,7,8,9,0, mat)));
