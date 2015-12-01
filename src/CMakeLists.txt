@@ -8,6 +8,7 @@ set(pathtracer_SRCS
 	imagebuffer.cpp
 	object.cpp
     quadric.cpp
+    mesh.cpp
 	scene.cpp
 	material.cpp
 	main.cpp
