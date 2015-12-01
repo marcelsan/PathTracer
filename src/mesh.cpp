@@ -18,11 +18,10 @@ Mesh::~Mesh()
 
 }
 
-Intersection Mesh::intersect(const Ray& ray) const
+bool Mesh::intersect(const Ray& ray, Intersection& inter) const
 {
-    // ToDO: implement intersection with mesh
-
-    return {};
+    // TODO: implement intersection with mesh
+    return false;
 }
 
 void Mesh::addVertex(vec3 vertex, vec3 normal)

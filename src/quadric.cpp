@@ -27,7 +27,7 @@ Quadric::~Quadric()
 {
 }
 
-Intersection Quadric::intersect(const Ray& ray) const
+bool Quadric::intersect(const Ray& ray, Intersection& inter) const
 {
     float  acoef, bcoef, ccoef; // Intersection coefficents
     float  dx, dy, dz; // Direction - origin coordinates
@@ -75,12 +75,12 @@ Intersection Quadric::intersect(const Ray& ray) const
 
     if ( 1.0 + acoef == 1.0 ) {
         if ( 1.0 + bcoef == 1.0 )
-            return {};
+            return false;
         t = ( -ccoef ) / ( bcoef );
     } else {
         disc = bcoef * bcoef - 4 * acoef * ccoef;
         if ( 1.0 + disc < 1.0 )
-            return {};
+            return false;
         root = sqrt( disc );
         t = ( -bcoef - root ) / ( acoef + acoef );
         if ( t < 0.0 )
@@ -88,11 +88,12 @@ Intersection Quadric::intersect(const Ray& ray) const
     }
 
     if (t < 0.001)
-        return {};
+        return false;
 
-    vec3 p(x0 + t * dx, y0 + t * dy, z0 + t * dz);
+    inter.p = {x0 + t * dx, y0 + t * dy, z0 + t * dz};
+    inter.n = normal(inter.p);
 
-    return {p, normal(p)};
+    return true;
 }
 
 const vec3 Quadric::normal(vec3 point) const

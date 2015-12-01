@@ -21,6 +21,8 @@ public:
 
 	void add(std::unique_ptr<Object> o);
     void setCamera(const Camera& cam);
+
+    bool raycast(const Ray& ray, Intersection& inter) const;
 };
 
 }

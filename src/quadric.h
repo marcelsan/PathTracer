@@ -15,7 +15,7 @@ public:
             const Material& m);
     virtual ~Quadric();
 
-    Intersection intersect(const Ray& ray) const;
+    virtual bool intersect(const Ray& ray, Intersection& inter) const;
     const vec3 normal(vec3 point) const;
 
 private:
