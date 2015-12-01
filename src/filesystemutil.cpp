@@ -96,16 +96,9 @@ inline static void readEye(std::istream& stream, Scene& s)
 inline static void readMesh(std::istream& stream, Scene& s)
 {
     std::string objFile;
-    vec3 color;
-    float ka, kd, ks, kt;
-    int n;
-
     stream >> objFile;
-    stream >> color;
-    stream >> ka >> kd >> ks >> kt;
-    stream >> n;
 
-    Material mat(color, ka, kd, ks, kt, n);
+    Material mat = readMaterial(stream);
     Mesh* m = new Mesh(mat);
 
     readOBJFile(objFile, m);
