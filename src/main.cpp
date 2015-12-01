@@ -25,12 +25,13 @@ int main(int argc, char const *argv[])
 	color b(0, 0, 1);
 
 	Scene s;
+	Camera cam;
 
 	if (argc < 2)
 		exit(-1);
 
 	std::string path(argv[1]);
-	FileSystemUtil::readSDLFile(path, s);
+	FileSystemUtil::readSDLFile(path, cam, s);
 
 	Material mat(vec3(1,0,0), 10.0, 1.0, 1.0, 1.0, 1);
 	s.add(std::unique_ptr<Object>(new Quadric(10,2,3,4,5,6,7,8,9,0, mat)));

@@ -7,16 +7,11 @@ using namespace glm;
 
 namespace PathTrace {
 
-class Camera
+struct Camera
 {
-public:
-    Camera();
-    Camera(vec3 eye);
-    ~Camera();
-
-private:
     vec3 eye;
 };
+
 }
 
 #endif

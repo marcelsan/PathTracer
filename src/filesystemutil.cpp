@@ -86,12 +86,10 @@ inline static void readQuadric(std::istream& stream, Scene& s)
     s.add(std::unique_ptr<Object>(new Quadric(a,b,c,d,e,f,g,h,j,k,mat)));
 }
 
-inline static void readEye(std::istream& stream, Scene& s)
+inline static void readEye(std::istream& stream, Camera& cam)
 {
     vec3 eye;
-    stream >> eye;
-    Camera cam(eye);
-    s.setCamera(cam);
+    stream >> cam.eye;
 }
 
 inline static void readMesh(std::istream& stream, Scene& s)
@@ -106,7 +104,7 @@ inline static void readMesh(std::istream& stream, Scene& s)
     s.add(std::unique_ptr<Object>(m));
 }
 
-void readSDLFile(const std::string& path, PathTrace::Scene& s)
+void readSDLFile(const std::string& path, Camera& cam, PathTrace::Scene& s)
 {
     std::ifstream stream;
     load(path, stream);
@@ -131,7 +129,7 @@ void readSDLFile(const std::string& path, PathTrace::Scene& s)
             // TODO
         }
         else if (option ==  "eye") {
-            readEye(ss, s);
+            readEye(ss, cam);
         }
         else if (option == "object") {
             readMesh(ss, s);
