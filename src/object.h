@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <memory>
+#include <iostream>
 #include "ray.h"
 #include "material.h"
 #include "intersection.h"

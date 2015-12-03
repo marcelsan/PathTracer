@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <regex>
 #include "quadric.h"
 #include "camera.h"
 #include "object.h"
@@ -24,20 +25,65 @@ inline static void load(const std::string& url, std::ifstream& stream)
     }
 }
 
+inline static void getIntFromString(const std::string& s, 
+                                    std::vector<unsigned int>& v)
+{
+    static std::regex e("(\\d+)");
+
+    auto words_begin = std::sregex_iterator(s.begin(), s.end(), e);
+    auto words_end = std::sregex_iterator();
+ 
+    for (std::sregex_iterator i = words_begin; i != words_end; ++i) {
+        std::smatch match = *i;                              
+        v.push_back(std::stoi(match.str()));
+    }
+}
+
+std::istream& operator>> (std::istream& stream, Mesh::Triangle& t)
+{
+    // TODO: add support to texture
+    static std::regex dd("(\\d+)\\/\\/(\\d+)");
+    std::string s;
+    std::vector<unsigned int> indices;
+    std::getline(stream, s);
+
+    auto words_begin = std::sregex_iterator(s.begin(), s.end(), dd);
+    auto words_end = std::sregex_iterator();
+ 
+    for (std::sregex_iterator i = words_begin; i != words_end; ++i) {
+        std::smatch match = *i;   
+        getIntFromString(match.str(), indices);
+    }
+
+    t.a  = indices.at(0);
+    t.na = indices.at(1);
+    t.b  = indices.at(2);
+    t.nb = indices.at(3);
+    t.c  = indices.at(4);
+    t.nc = indices.at(5);
+
+    return stream;
+} 
+
+inline static std::istream& operator>>(std::istream& stream, vec3& v)
+{
+    return stream >> v.x >> v.y >> v.z;
+}
+
 inline void readOBJFile(const std::string& url, PathTrace::Mesh* m) 
 {
     if(url == "")
         return;
 
+    // TODO: improve this part of code
+    std::string url2("../../data/cornellroom/" + url);
     std::ifstream stream;
-    load(url, stream);
-
-    // ToDO: consider more general types of obj files
+    load(url2, stream);
 
     while(!stream.eof()) {
         std::string line;
         std::string option;
-        getline(stream, line);
+        std::getline(stream, line);
         std::stringstream ss(line);
 
         ss >> option;
@@ -46,23 +92,22 @@ inline void readOBJFile(const std::string& url, PathTrace::Mesh* m)
             continue;
         }
 
-        if (option[0] == 'v') {
-            float x, y, z;
-            ss >> x >> y >> z;
-            m->addVertex(vec3(x, y, z));
-        } else if (option[0] == 'n') {
-            // TODO
-        } else if(option[0] == 'f') {
-            int a, b, c;
-            ss >> a >> b >> c;
-            m->addTriangle(a, b, c);
+        if (option == "v") {
+            vec3 v;
+            ss >> v;
+            m->addVertex(v);
         }
+        else if(option[0] == 'f') {
+            Mesh::Triangle t;
+            ss >> t;
+            m->addTriangle(t);
+        }
+        else if (option == "vn") {
+            vec3 vn;
+            ss >> vn;
+            m->addNormal(vn);
+        } 
     }
-}
-
-inline static std::istream& operator>>(std::istream& stream, vec3& v)
-{
-    return stream >> v.x >> v.y >> v.z;
 }
 
 inline static Material readMaterial(std::istream& stream)
