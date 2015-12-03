@@ -47,23 +47,23 @@ void Mesh::resetObject()
     this->normals.clear();
 }
 
-std::ostream& Mesh::operator<< (std::ostream &output)
+std::ostream& operator<<(std::ostream &output, const Mesh& m)
 {
-    for (const auto& v: vertices) {
+    for (const auto& v: m.vertices) {
         output << "v "
             << v.x << " "
             << v.y << " "
             << v.z << std::endl;
     }
 
-    for (const auto& n: normals) {
+    for (const auto& n: m.normals) {
         output << "vn "
             << n.x << " "
             << n.y << " "
             << n.z << std::endl;
     }
 
-    for (const auto& t : triangles) {
+    for (const auto& t : m.triangles) {
         output << "f "
             << t.a << "//"  << t.na << " "
             << t.b << "//"  << t.nb << " "
