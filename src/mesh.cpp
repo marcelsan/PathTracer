@@ -47,31 +47,30 @@ void Mesh::resetObject()
     this->normals.clear();
 }
 
-void Mesh::print()
-{   
-
-    std::cout << "aqui" << std::endl;
-
-    for(int i = 0; i < vertices.size(); ++i)
-    {
-        std::cout << "v " << vertices[i].x << " " 
-                  << vertices[i].y << " " 
-                  << vertices[i].z << "\n";
+std::ostream& Mesh::operator<< (std::ostream &output)
+{
+    for (const auto& v: vertices) {
+        output << "v "
+            << v.x << " "
+            << v.y << " "
+            << v.z << std::endl;
     }
 
-    for(int i = 0; i < normals.size(); ++i)
-    {
-        std::cout << "vn " << normals[i].x << " " 
-                  << normals[i].y << " " 
-                  << normals[i].z << "\n";
+    for (const auto& n: normals) {
+        output << "vn "
+            << n.x << " "
+            << n.y << " "
+            << n.z << std::endl;
     }
 
-    for(int i = 0; i < triangles.size(); ++i)
-    {
-        std::cout << "f " << triangles[i].a << "//"  << triangles[i].na << " " 
-                  << triangles[i].b << "//"  << triangles[i].nb << " " 
-                  << triangles[i].c << "//"  << triangles[i].nc << "\n"; 
+    for (const auto& t : triangles) {
+        output << "f "
+            << t.a << "//"  << t.na << " "
+            << t.b << "//"  << t.nb << " "
+            << t.c << "//"  << t.nc << std::endl;
     }
+
+    return output;
 }
 
 }
