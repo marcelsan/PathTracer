@@ -15,7 +15,7 @@ Box::~Box()
 {
 }
 
-bool Box::intersects(const Ray& r) const
+bool Box::intersect(const Ray& r, Intersection& inter) const
 {
     vec3 invd = {1.0f / r.d.x, 1.0f / r.d.y, 1.0f / r.d.z};
 

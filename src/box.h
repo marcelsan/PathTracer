@@ -19,7 +19,7 @@ public:
     Box(vec3 min, vec3 max);
     ~Box();
 
-    bool intersects(const Ray& ray) const;
+    virtual bool intersect(const Ray& ray, Intersection& inter) const;
 };
 
 }

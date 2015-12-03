@@ -18,7 +18,7 @@ public:
     Mesh();
     Mesh(const Material& m);
     virtual ~Mesh();
-    Intersection intersect(const Ray& ray) const;
+    bool intersect(const Ray& ray, Intersection& inter) const;
     void addVertex(vec3 vertex);
     void addTriangle(Triangle t);
     void addNormal(vec3 normal);

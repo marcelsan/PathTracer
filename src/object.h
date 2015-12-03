@@ -18,7 +18,7 @@ public:
     Object();
     Object(const Material& m);
     virtual ~Object();
-    virtual Intersection intersect(const Ray& ray) const = 0;
+    virtual bool intersect(const Ray& ray, Intersection& inter) const = 0;
 
 private:
 	Material mat;
