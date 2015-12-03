@@ -25,20 +25,6 @@ inline static void load(const std::string& url, std::ifstream& stream)
     }
 }
 
-inline static void getIntFromString(const std::string& s, 
-                                    std::vector<unsigned int>& v)
-{
-    static std::regex e("(\\d+)");
-
-    auto words_begin = std::sregex_iterator(s.begin(), s.end(), e);
-    auto words_end = std::sregex_iterator();
- 
-    for (std::sregex_iterator i = words_begin; i != words_end; ++i) {
-        std::smatch match = *i;                              
-        v.push_back(std::stoi(match.str()));
-    }
-}
-
 std::istream& operator>> (std::istream& stream, Mesh::Triangle& t)
 {
     // TODO: add support to texture
@@ -49,18 +35,20 @@ std::istream& operator>> (std::istream& stream, Mesh::Triangle& t)
 
     auto words_begin = std::sregex_iterator(s.begin(), s.end(), dd);
     auto words_end = std::sregex_iterator();
- 
+    
     for (std::sregex_iterator i = words_begin; i != words_end; ++i) {
         std::smatch match = *i;   
-        getIntFromString(match.str(), indices);
+
+        indices.push_back(std::stoi(match[1].str()));
+        indices.push_back(std::stoi(match[2].str()));
     }
 
-    t.a  = indices.at(0);
-    t.na = indices.at(1);
-    t.b  = indices.at(2);
-    t.nb = indices.at(3);
-    t.c  = indices.at(4);
-    t.nc = indices.at(5);
+    t.a  = indices[0];
+    t.na = indices[1];
+    t.b  = indices[2];
+    t.nb = indices[3];
+    t.c  = indices[4];
+    t.nc = indices[5];
 
     return stream;
 } 

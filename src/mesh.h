@@ -23,7 +23,7 @@ public:
     void addTriangle(Triangle t);
     void addNormal(vec3 normal);
     void resetObject();
-    std::ostream& operator<< (std::ostream& output);
+    void print();
 
 private:
     std::vector<vec3> vertices;

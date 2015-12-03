@@ -27,10 +27,10 @@ int main(int argc, char const *argv[])
 
 	Scene s;
 
-	if (argc < 2)
-		exit(-1);
+	// if (argc < 2)
+	// 	exit(-1);
+	//std::string path(argv[1]);
 
-	std::string path(argv[1]);
 	FileSystemUtil::readSDLFile("../../data/cornellroom/test.sdl", s);
 
 	Material mat(vec3(1,0,0), 10.0, 1.0, 1.0, 1.0, 1);

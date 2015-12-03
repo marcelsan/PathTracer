@@ -47,33 +47,31 @@ void Mesh::resetObject()
     this->normals.clear();
 }
 
-std::ostream& Mesh::operator<< (std::ostream &output)
+void Mesh::print()
 {   
 
     std::cout << "aqui" << std::endl;
 
     for(int i = 0; i < vertices.size(); ++i)
     {
-        output << "v " << vertices[i].x << " " 
+        std::cout << "v " << vertices[i].x << " " 
                   << vertices[i].y << " " 
                   << vertices[i].z << "\n";
     }
 
     for(int i = 0; i < normals.size(); ++i)
     {
-        output << "vn " << normals[i].x << " " 
+        std::cout << "vn " << normals[i].x << " " 
                   << normals[i].y << " " 
                   << normals[i].z << "\n";
     }
 
     for(int i = 0; i < triangles.size(); ++i)
     {
-        output << "f " << triangles[i].a << "//"  << triangles[i].na << " " 
+        std::cout << "f " << triangles[i].a << "//"  << triangles[i].na << " " 
                   << triangles[i].b << "//"  << triangles[i].nb << " " 
                   << triangles[i].c << "//"  << triangles[i].nc << "\n"; 
     }
-
-    return output;
 }
 
 }

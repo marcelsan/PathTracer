@@ -15,6 +15,7 @@ private:
     vec3 min, max;
 
 public:
+    Box();
     Box(vec3 min, vec3 max);
     ~Box();
 
