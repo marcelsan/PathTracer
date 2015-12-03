@@ -39,8 +39,8 @@ std::istream& operator>> (std::istream& stream, Mesh::Triangle& t)
     for (std::sregex_iterator i = words_begin; i != words_end; ++i) {
         std::smatch match = *i;   
 
-        indices.push_back(std::stoi(match[1].str()));
-        indices.push_back(std::stoi(match[2].str()));
+        indices.push_back(std::stoi(match[1].str()) - 1);
+        indices.push_back(std::stoi(match[2].str()) - 1);
     }
 
     t.a  = indices[0];
