@@ -20,7 +20,49 @@ Mesh::~Mesh()
 
 bool Mesh::intersect(const Ray& ray, Intersection& inter) const
 {
-    // TODO: implement intersection with mesh
+    for(const auto& tr : triangles) {
+        float r, a, b;
+        glm::vec3 u = vertices[tr.b] - vertices[tr.a];
+        glm::vec3 v = vertices[tr.c] - vertices[tr.a];
+        glm::vec3 n = glm::cross(u, v);
+
+        glm::vec3 dir = ray.d - ray.o;             
+        glm::vec3 w0  = ray.o - vertices[tr.a];
+        a = -glm::dot(n, w0);
+        b = glm::dot(n, dir);
+
+        if (fabs(b) < FLT_MIN) 
+            continue;              
+
+        r = a / b;
+        if (r < 0.0)                    
+            continue;                   
+        
+        glm::vec3 i = ray.o + r * dir;
+
+        float    uu, uv, vv, wu, wv, D;
+        uu = glm::dot(u,u);
+        uv = glm::dot(u,v);
+        vv = glm::dot(v,v);
+        glm::vec3 w = i - vertices[tr.a];
+        wu = dot(w,u);
+        wv = dot(w,v);
+        D = uv * uv - uu * vv;
+
+        float s, t;
+        s = (uv * wv - vv * wu) / D;
+        if (s < 0.0 || s > 1.0)         
+            continue;
+        t = (uv * wu - uu * wv) / D;
+        if (t < 0.0 || (s + t) > 1.0)
+            continue ;
+
+        inter.n = (1 - s - t) * normals[tr.na] + s * normals[tr.nb] + t * normals[tr.nc];
+        inter.p = i;
+
+        return true;
+    }
+
     return false;
 }
 

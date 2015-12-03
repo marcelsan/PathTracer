@@ -2,6 +2,7 @@
 #define MESH_H
 
 #include "object.h"
+#include <cfloat>
 
 using namespace glm;
 
