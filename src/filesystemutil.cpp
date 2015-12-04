@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <regex>
 #include "quadric.h"
 #include "camera.h"
 #include "object.h"
@@ -24,20 +25,52 @@ inline static void load(const std::string& url, std::ifstream& stream)
     }
 }
 
+std::istream& operator>> (std::istream& stream, Mesh::Triangle& t)
+{
+    // TODO: add support to texture
+    static std::regex dd("(\\d+)\\/\\/(\\d+)");
+    std::string s;
+    std::vector<unsigned int> indices;
+    std::getline(stream, s);
+
+    auto words_begin = std::sregex_iterator(s.begin(), s.end(), dd);
+    auto words_end = std::sregex_iterator();
+    
+    for (std::sregex_iterator i = words_begin; i != words_end; ++i) {
+        std::smatch match = *i;   
+
+        indices.push_back(std::stoi(match[1].str()) - 1);
+        indices.push_back(std::stoi(match[2].str()) - 1);
+    }
+
+    t.a  = indices[0];
+    t.na = indices[1];
+    t.b  = indices[2];
+    t.nb = indices[3];
+    t.c  = indices[4];
+    t.nc = indices[5];
+
+    return stream;
+} 
+
+inline static std::istream& operator>>(std::istream& stream, vec3& v)
+{
+    return stream >> v.x >> v.y >> v.z;
+}
+
 inline void readOBJFile(const std::string& url, PathTrace::Mesh* m) 
 {
     if(url == "")
         return;
 
+    // TODO: improve this part of code
     std::ifstream stream;
     load(url, stream);
-
-    // ToDO: consider more general types of obj files
 
     while(!stream.eof()) {
         std::string line;
         std::string option;
-        getline(stream, line);
+        std::getline(stream, line);
         std::stringstream ss(line);
 
         ss >> option;
@@ -46,23 +79,22 @@ inline void readOBJFile(const std::string& url, PathTrace::Mesh* m)
             continue;
         }
 
-        if (option[0] == 'v') {
-            float x, y, z;
-            ss >> x >> y >> z;
-            m->addVertex(vec3(x, y, z));
-        } else if (option[0] == 'n') {
-            // TODO
-        } else if(option[0] == 'f') {
-            int a, b, c;
-            ss >> a >> b >> c;
-            m->addTriangle(a, b, c);
+        if (option == "v") {
+            vec3 v;
+            ss >> v;
+            m->addVertex(v);
         }
+        else if(option[0] == 'f') {
+            Mesh::Triangle t;
+            ss >> t;
+            m->addTriangle(t);
+        }
+        else if (option == "vn") {
+            vec3 vn;
+            ss >> vn;
+            m->addNormal(vn);
+        } 
     }
-}
-
-inline static std::istream& operator>>(std::istream& stream, vec3& v)
-{
-    return stream >> v.x >> v.y >> v.z;
 }
 
 inline static Material readMaterial(std::istream& stream)
@@ -93,7 +125,7 @@ inline static void readEye(std::istream& stream, Camera& cam)
     cam.setEye(eye);
 }
 
-inline static void readMesh(std::istream& stream, Scene& s)
+inline static void readMesh(const std::string& path, std::istream& stream, Scene& s)
 {
     std::string objFile;
     stream >> objFile;
@@ -101,14 +133,26 @@ inline static void readMesh(std::istream& stream, Scene& s)
     Material mat = readMaterial(stream);
     Mesh* m = new Mesh(mat);
 
-    readOBJFile(objFile, m);
+    readOBJFile(path + objFile, m);
     s.add(std::unique_ptr<Object>(m));
 }
 
-void readSDLFile(const std::string& path, Camera& cam, PathTrace::Scene& s)
+std::string dirpath(std::string filepath)
+{
+    std::size_t found = filepath.rfind("/");
+    if (found == std::string::npos)
+        exit(-1);
+
+    filepath.erase(filepath.begin() + found + 1, filepath.end());
+    return filepath;
+}
+
+void readSDLFile(const std::string& sdlpath, Camera& cam, PathTrace::Scene& s)
 {
     std::ifstream stream;
-    load(path, stream);
+    load(sdlpath, stream);
+
+    std::string path = dirpath(sdlpath);
 
     while(!stream.eof()) {
         std::string line;
@@ -133,7 +177,7 @@ void readSDLFile(const std::string& path, Camera& cam, PathTrace::Scene& s)
             readEye(ss, cam);
         }
         else if (option == "object") {
-            readMesh(ss, s);
+            readMesh(path, ss, s);
         }
     }
 

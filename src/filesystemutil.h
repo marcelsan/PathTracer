@@ -9,7 +9,7 @@
 namespace FileSystemUtil
 {
 void readSDLFile(const std::string& path, PathTrace::Camera& cam, PathTrace::Scene& s);
-void readOBJFile(const std::string& url, PathTrace::Mesh& m);
+void readOBJFile(const std::string& path, PathTrace::Mesh& m);
 }
 
 #endif

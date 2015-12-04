@@ -10,6 +10,7 @@
 #include "color.h"
 #include "filesystemutil.h"
 #include "quadric.h"
+#include "mesh.h"
 
 using namespace glm;
 using namespace PathTrace;

@@ -20,25 +20,98 @@ Mesh::~Mesh()
 
 bool Mesh::intersect(const Ray& ray, Intersection& inter) const
 {
-    // TODO: implement intersection with mesh
+    for(const auto& tr : triangles) {
+        float r, a, b;
+        glm::vec3 u = vertices[tr.b] - vertices[tr.a];
+        glm::vec3 v = vertices[tr.c] - vertices[tr.a];
+        glm::vec3 n = glm::cross(u, v);
+
+        glm::vec3 dir = ray.d - ray.o;             
+        glm::vec3 w0  = ray.o - vertices[tr.a];
+        a = -glm::dot(n, w0);
+        b = glm::dot(n, dir);
+
+        if (fabs(b) < FLT_MIN) 
+            continue;              
+
+        r = a / b;
+        if (r < 0.0)                    
+            continue;                   
+        
+        glm::vec3 i = ray.o + r * dir;
+
+        float    uu, uv, vv, wu, wv, D;
+        uu = glm::dot(u,u);
+        uv = glm::dot(u,v);
+        vv = glm::dot(v,v);
+        glm::vec3 w = i - vertices[tr.a];
+        wu = dot(w,u);
+        wv = dot(w,v);
+        D = uv * uv - uu * vv;
+
+        float s, t;
+        s = (uv * wv - vv * wu) / D;
+        if (s < 0.0 || s > 1.0)         
+            continue;
+        t = (uv * wu - uu * wv) / D;
+        if (t < 0.0 || (s + t) > 1.0)
+            continue ;
+
+        inter.n = (1 - s - t) * normals[tr.na] + s * normals[tr.nb] + t * normals[tr.nc];
+        inter.p = i;
+
+        return true;
+    }
+
     return false;
 }
 
-void Mesh::addVertex(vec3 vertex, vec3 normal)
+void Mesh::addVertex(vec3 v)
 {
-    Vertex v = {vertex, normal};
     vertices.push_back(v);
 }
 
-void Mesh::addTriangle(unsigned int a, unsigned int b, unsigned int c)
+void Mesh::addTriangle(Triangle t)
 {
-    triangles.push_back({a, b, c});
+    triangles.push_back(t);
+}
+
+void Mesh::addNormal(vec3 n)
+{
+    normals.push_back(n);
 }
 
 void Mesh::resetObject()
 {
     this->vertices.clear();
     this->triangles.clear();
+    this->normals.clear();
+}
+
+std::ostream& operator<<(std::ostream &output, const Mesh& m)
+{
+    for (const auto& v: m.vertices) {
+        output << "v "
+            << v.x << " "
+            << v.y << " "
+            << v.z << std::endl;
+    }
+
+    for (const auto& n: m.normals) {
+        output << "vn "
+            << n.x << " "
+            << n.y << " "
+            << n.z << std::endl;
+    }
+
+    for (const auto& t : m.triangles) {
+        output << "f "
+            << t.a << "//"  << t.na << " "
+            << t.b << "//"  << t.nb << " "
+            << t.c << "//"  << t.nc << std::endl;
+    }
+
+    return output;
 }
 
 }
