@@ -28,8 +28,10 @@ int main(int argc, char const *argv[])
     Scene s;
     Camera cam;
 
-    if (argc < 2)
+    if (argc < 2) {
+        std::cout << "ERROR: no specified SDL file." << std::endl;
         exit(-1);
+    }
 
     std::string path(argv[1]);
     FileSystemUtil::readSDLFile(path, cam, s);
