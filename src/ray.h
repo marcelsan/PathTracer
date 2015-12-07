@@ -15,6 +15,8 @@ struct Ray {
     vec3 o, d;
 };
 
+std::ostream& operator<<(std::ostream& os, const Ray& ray);
+
 }
 
 #endif

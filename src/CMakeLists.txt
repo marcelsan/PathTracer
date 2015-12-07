@@ -11,6 +11,7 @@ set(pathtracer_SRCS
 	scene.cpp
 	material.cpp
     filesystemutil.cpp
+    ray.cpp
 	main.cpp
 )
 
