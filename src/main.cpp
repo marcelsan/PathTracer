@@ -14,10 +14,6 @@ using namespace PathTrace;
 
 int main(int argc, char const *argv[])
 {
-    Scene s;
-    Camera cam;
-    ImageBuffer ib(100, 100);
-
     if (argc < 2) {
         std::cerr << "ERROR: no specified SDL file." << std::endl;
         exit(-1);
@@ -25,6 +21,10 @@ int main(int argc, char const *argv[])
         std::cerr << "ERROR: no specified .pnm output file." << std::endl;
         exit(-1);
     }
+
+    Scene s;
+    Camera cam;
+    ImageBuffer ib(100, 100);
 
     std::string path(argv[1]);
     FileSystemUtil::readSDLFile(path, cam, s);
