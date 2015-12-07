@@ -19,8 +19,8 @@ void Scene::add(std::unique_ptr<Object> o)
 
 bool Scene::raycast(const Ray& ray, Intersection& closestInter) const
 {
-    float closestDistance =  std::numeric_limits<float>::max();
-    bool anyIntersection = false;
+    float closest_distance =  std::numeric_limits<float>::max();
+    bool any_intersection = false;
 
     for (auto const& o : objects) {
         Intersection inter;
@@ -28,15 +28,15 @@ bool Scene::raycast(const Ray& ray, Intersection& closestInter) const
             continue;
 
         float d = distance(ray.o, inter.p);
-        if (d < closestDistance)
+        if (d > closest_distance)
             continue;
 
-        closestDistance = d;
+        closest_distance = d;
         closestInter = inter;
-        anyIntersection = true;
+        any_intersection = true;
     }
 
-    return anyIntersection;
+    return any_intersection;
 }
 
 }
