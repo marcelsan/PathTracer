@@ -1,5 +1,6 @@
 
 #include <glm/glm.hpp>
+#include <fstream>
 #include <iostream>
 #include <memory>
 
@@ -39,7 +40,13 @@ int main(int argc, char const *argv[])
     Material mat(vec3(1,0,0), 10.0, 1.0, 1.0, 1.0, 1);
     s.add(std::unique_ptr<Object>(new Quadric(10,2,3,4,5,6,7,8,9,0, mat)));
 
-    ImageBuffer<color> ib(100, 100);
+    if (argc < 3)
+        return 0;
+
+    ImageBuffer ib(100, 100);
+    std::ofstream ofs (argv[2], std::ofstream::out);
+    ofs << ib;
+    ofs.close();
 
     return 0;
 }
