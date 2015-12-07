@@ -18,8 +18,13 @@ int main(int argc, char const *argv[])
     Camera cam;
     ImageBuffer ib(100, 100);
 
-    if (argc < 3)
+    if (argc < 2) {
+        std::cerr << "ERROR: no specified SDL file." << std::endl;
         exit(-1);
+    } else if (argc < 3) {
+        std::cerr << "ERROR: no specified .pnm output file." << std::endl;
+        exit(-1);
+    }
 
     std::string path(argv[1]);
     FileSystemUtil::readSDLFile(path, cam, s);
