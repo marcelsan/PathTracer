@@ -21,7 +21,7 @@ public:
     virtual bool intersect(const Ray& ray, Intersection& inter) const = 0;
 
 private:
-	Material mat;
+    Material mat;
 };
 
 }
