@@ -2,29 +2,32 @@
 #define IMAGEBUFFER_H
 
 #include <vector>
+#include <iostream>
+#include "color.h"
 
 namespace PathTrace {
 
-template<typename C>
 class ImageBuffer
 {
 private:
-	std::vector<C> buffer;
-	std::size_t w;
-	std::size_t h;
+    std::vector<color> buffer;
+    std::size_t w;
+    std::size_t h;
 
 public:
-	ImageBuffer(std::size_t width, std::size_t height)
-		: buffer(width * height)
-		, w(width)
-		, h(height)
-	{
-	}
+    ImageBuffer(std::size_t width, std::size_t height)
+        : buffer(width * height)
+        , w(width)
+        , h(height)
+    {
+    }
 
-	std::size_t width() const { return w; }
-	std::size_t height() const { return h; }
-	C& operator[](std::size_t idx) { return buffer[idx]; };
-    const C& operator[](std::size_t idx) const { return buffer[idx]; };
+    std::size_t width() const { return w; }
+    std::size_t height() const { return h; }
+    color& operator()(std::size_t i, std::size_t j) { return buffer[i * w + j]; };
+    const color& operator()(std::size_t i, std::size_t j) const { return buffer[i * w + j]; };
+
+    friend std::ostream& operator<<(std::ostream& stream, const ImageBuffer &);
 };
 
 }
