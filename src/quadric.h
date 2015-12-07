@@ -12,7 +12,7 @@ public:
     Quadric();
     Quadric(float a, float b, float c, float d, float e,
             float f, float g, float h, float i, float j,
-            const Material& m);
+            const Material& m = {});
     virtual ~Quadric();
 
     virtual bool intersect(const Ray& ray, Intersection& inter) const;
