@@ -12,9 +12,9 @@ void ImageBuffer::clear(const color& c)
 
 static std::ostream& operator<<(std::ostream& stream, const color& color)
 {
-    stream << round(color.r) << " ";
-    stream << round(color.g) << " ";
-    stream << round(color.b) << " ";
+    stream << int(round(color.r)) << " ";
+    stream << int(round(color.g)) << " ";
+    stream << int(round(color.b)) << " ";
     return stream;
 }
 

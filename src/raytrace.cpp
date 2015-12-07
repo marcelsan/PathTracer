@@ -14,7 +14,7 @@ void raytrace(ImageBuffer &buffer, const Scene& scene, const Camera& cam)
             Intersection inter;
             if (scene.raycast(ray, inter)) {
                 // XXX
-                buffer(i, j) = vec3(255, 255, 255);
+                buffer(i, j) = normalize(vec3(1, 1, 1) + normalize(inter.n)) * 255.0f;
             }
         }
     }
