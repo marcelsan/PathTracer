@@ -26,6 +26,7 @@ public:
     std::size_t height() const { return h; }
     color& operator()(std::size_t i, std::size_t j) { return buffer[i * w + j]; };
     const color& operator()(std::size_t i, std::size_t j) const { return buffer[i * w + j]; };
+    void clear(const color& c);
 
     friend std::ostream& operator<<(std::ostream& stream, const ImageBuffer &);
 };

@@ -4,6 +4,12 @@
 
 namespace PathTrace {
 
+void ImageBuffer::clear(const color& c)
+{
+    for (auto& bc : buffer)
+        bc = c;
+}
+
 static std::ostream& operator<<(std::ostream& stream, const color& color)
 {
     stream << round(color.r) << " ";
