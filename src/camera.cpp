@@ -5,45 +5,27 @@
 
 namespace PathTrace {
 
-Ray Camera::ray(const vec2& param) const
+Ray Camera::ray(float i, float j) const
 {
-    assert(0 <= param.x && param.x <= 1);
-    assert(0 <= param.y && param.y <= 1);
-
-    vec2 c = param - vec2(0.5f, 0.5f);
+    // Z always == 0
+    vec2 clip = clipMax - clipMin;
+    vec3 dest = vec3(clipMin.x, clipMin.y, 0) + vec3(clip.x * j, clip.y * i, 0);
 
     Ray r;
-    r.o = focus + c.x * vx + c.y * vy;
-    r.d = r.o - eye;
+    r.o = eye;
+    r.d = normalize(dest - eye);
     return r;
 }
 
 void Camera::setEye(const vec3& e)
 {
     eye = e;
-    updateVxVy();
 }
 
-void Camera::setDir(const vec3& d)
+void Camera::setOrtho(const vec2& min, const vec2& max)
 {
-    dir = d;
-    updateVxVy();
-}
-
-void Camera::setUp(const vec3& u)
-{
-    up = u;
-    updateVxVy();
-}
-
-void Camera::updateVxVy()
-{
-    // TODO: create a matrix for this
-    vec2 clip = clipMax - clipMin;
-
-    vx = normalize(cross(dir, up)) * clip.x;
-    vy = normalize(-up) * clip.y;
-    focus = eye + normalize(dir) * focusDistance;
+    clipMin = min;
+    clipMax = max;
 }
 
 }

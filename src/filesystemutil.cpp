@@ -58,6 +58,11 @@ inline static std::istream& operator>>(std::istream& stream, vec3& v)
     return stream >> v.x >> v.y >> v.z;
 }
 
+inline static std::istream& operator>>(std::istream& stream, vec2& v)
+{
+    return stream >> v.x >> v.y;
+}
+
 inline void readOBJFile(const std::string& url, PathTrace::Mesh* m) 
 {
     if(url == "")
@@ -125,6 +130,13 @@ inline static void readEye(std::istream& stream, Camera& cam)
     cam.setEye(eye);
 }
 
+inline static void readOrtho(std::istream& stream, Camera& cam)
+{
+    vec2 min, max;
+    stream >> min >> max;
+    cam.setOrtho(min, max);
+}
+
 inline static void readMesh(const std::string& path, std::istream& stream, Scene& s)
 {
     std::string objFile;
@@ -175,6 +187,9 @@ void readSDLFile(const std::string& sdlpath, Camera& cam, PathTrace::Scene& s)
         }
         else if (option ==  "eye") {
             readEye(ss, cam);
+        }
+        else if (option ==  "ortho") {
+            readOrtho(ss, cam);
         }
         else if (option == "object") {
             readMesh(path, ss, s);

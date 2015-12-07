@@ -13,21 +13,14 @@ struct Camera
 {
 public:
     void setEye(const vec3& eye);
-    void setUp(const vec3& up);
-    void setDir(const vec3& dir);
-    Ray ray(const vec2& param) const;
+    void setOrtho(const vec2& min, const vec2& max);
+    Ray ray(float i, float j) const; // i and j must be between 0 and 1
 
 private:
     vec3 eye;
-    vec3 dir;
-    vec3 up;
     vec2 clipMin = {-1.0, -1.0};
     vec2 clipMax = { 1.0,  1.0};
     float focusDistance = 1.0;
-
-    vec3 vx, vy;
-    vec3 focus;
-    void updateVxVy();
 };
 
 }
