@@ -11,9 +11,20 @@ namespace PathTrace {
 class Mesh : public Object
 {
 public:
+    struct Vertex {
+        int v = -1, n = -1, t = -1;
+    };
+
     struct Triangle {
+        void setA(const Vertex& v);
+        void setB(const Vertex& v);
+        void setC(const Vertex& v);
+
         unsigned int a, b, c;
-        unsigned int na, nb, nc;
+        int na, nb, nc;
+        int ta, tb, tc;
+
+        bool hasNormal() const;
     };
 
     Mesh();
@@ -22,8 +33,8 @@ public:
     bool intersect(const Ray& ray, Intersection& inter) const;
     void addVertex(vec3 vertex);
     void addTriangle(Triangle t);
-    void addNormal(vec3 normal);
-    void resetObject();
+    unsigned int addNormal(vec3 normal);
+    void calculateNormals();
 
     friend std::ostream& operator<<(std::ostream &output, const Mesh& m);
 

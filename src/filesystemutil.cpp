@@ -25,30 +25,38 @@ inline static void load(const std::string& url, std::ifstream& stream)
     }
 }
 
+
+
+inline static unsigned int mtoi(const std::ssub_match& m)
+{
+    return std::stoi(m.str()) - 1;
+}
+
+inline static Mesh::Vertex readVertex(const std::smatch& match)
+{
+    Mesh::Vertex v;
+    v.v = mtoi(match[1]);
+    if (match[2].length() == 0)
+        return v;
+    if (match[3].length() != 0)
+        v.t = mtoi(match[3]);
+    if (match[4].length() != 0)
+        v.n = mtoi(match[4]);
+    return v;
+}
+
 std::istream& operator>> (std::istream& stream, Mesh::Triangle& t)
 {
     // TODO: add support to texture
-    static std::regex dd("(\\d+)\\/\\/(\\d+)");
+    static std::regex vertex_regex("(\\d+)(\\/(\\d*)\\/(\\d+))?");
     std::string s;
     std::vector<unsigned int> indices;
     std::getline(stream, s);
 
-    auto words_begin = std::sregex_iterator(s.begin(), s.end(), dd);
-    auto words_end = std::sregex_iterator();
-    
-    for (std::sregex_iterator i = words_begin; i != words_end; ++i) {
-        std::smatch match = *i;   
-
-        indices.push_back(std::stoi(match[1].str()) - 1);
-        indices.push_back(std::stoi(match[2].str()) - 1);
-    }
-
-    t.a  = indices[0];
-    t.na = indices[1];
-    t.b  = indices[2];
-    t.nb = indices[3];
-    t.c  = indices[4];
-    t.nc = indices[5];
+    auto vertex_match = std::sregex_iterator(s.begin(), s.end(), vertex_regex);
+    t.setA(readVertex(*vertex_match));
+    t.setB(readVertex(*(++vertex_match)));
+    t.setC(readVertex(*(++vertex_match)));
 
     return stream;
 } 
@@ -71,6 +79,7 @@ inline void readOBJFile(const std::string& url, PathTrace::Mesh& mesh)
     // TODO: improve this part of code
     std::ifstream stream;
     load(url, stream);
+    bool has_normal = true;
 
     while(!stream.eof()) {
         std::string line;
@@ -91,14 +100,18 @@ inline void readOBJFile(const std::string& url, PathTrace::Mesh& mesh)
         else if(option[0] == 'f') {
             Mesh::Triangle t;
             ss >> t;
+            has_normal &= t.hasNormal();
             mesh.addTriangle(t);
         }
         else if (option == "vn") {
             vec3 vn;
             ss >> vn;
             mesh.addNormal(vn);
-        } 
+        }
     }
+
+    if (!has_normal)
+        mesh.calculateNormals();
 }
 
 inline static Material readMaterial(std::istream& stream)
