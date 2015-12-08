@@ -63,7 +63,7 @@ inline static std::istream& operator>>(std::istream& stream, vec2& v)
     return stream >> v.x >> v.y;
 }
 
-inline void readOBJFile(const std::string& url, PathTrace::Mesh* m) 
+inline void readOBJFile(const std::string& url, PathTrace::Mesh& mesh)
 {
     if(url == "")
         return;
@@ -80,24 +80,23 @@ inline void readOBJFile(const std::string& url, PathTrace::Mesh* m)
 
         ss >> option;
 
-        if(option[0] == '#') {
+        if (option[0] == '#')
             continue;
-        }
 
         if (option == "v") {
             vec3 v;
             ss >> v;
-            m->addVertex(v);
+            mesh.addVertex(v);
         }
         else if(option[0] == 'f') {
             Mesh::Triangle t;
             ss >> t;
-            m->addTriangle(t);
+            mesh.addTriangle(t);
         }
         else if (option == "vn") {
             vec3 vn;
             ss >> vn;
-            m->addNormal(vn);
+            mesh.addNormal(vn);
         } 
     }
 }
@@ -143,10 +142,9 @@ inline static void readMesh(const std::string& path, std::istream& stream, Scene
     stream >> objFile;
 
     Material mat = readMaterial(stream);
-    Mesh* m = new Mesh(mat);
-
-    readOBJFile(path + objFile, m);
-    s.add(std::unique_ptr<Object>(m));
+    std::unique_ptr<Mesh> mesh(new Mesh(mat));
+    readOBJFile(path + objFile, *mesh);
+    s.add(std::move(mesh));
 }
 
 std::string dirpath(std::string filepath)
