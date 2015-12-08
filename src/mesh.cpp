@@ -3,6 +3,7 @@
 namespace PathTrace {
 
 Mesh::Mesh()
+    : Object()
 {
 
 }
@@ -10,12 +11,10 @@ Mesh::Mesh()
 Mesh::Mesh(const Material& m)
     : Object(m)
 {
-
-};
+}
 
 Mesh::~Mesh()
 {
-
 }
 
 bool Mesh::intersect(const Ray& ray, Intersection& inter) const
@@ -23,7 +22,7 @@ bool Mesh::intersect(const Ray& ray, Intersection& inter) const
     float closest_distance = FLT_MAX;
     bool any_intersection = false;
     
-    for(const auto& tr : triangles) {
+    for (const auto& tr : triangles) {
         float r, a, b;
         glm::vec3 u = vertices[tr.b] - vertices[tr.a];
         glm::vec3 v = vertices[tr.c] - vertices[tr.a];
