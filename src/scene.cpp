@@ -1,4 +1,3 @@
-
 #include "scene.h"
 
 #include <glm/glm.hpp>
@@ -42,6 +41,16 @@ bool Scene::raycast(const Ray& ray, Intersection& closestInter) const
 void Scene::setBackground(const color& c)
 {
     bg = c;
+}
+
+void Scene::addLight(std::unique_ptr<Light> l)
+{
+    lights.push_back(std::move(l));
+}
+
+const std::vector<std::unique_ptr<Light>>& Scene::getLights() const
+{
+    return lights;
 }
 
 }

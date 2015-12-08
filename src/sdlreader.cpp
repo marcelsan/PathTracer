@@ -69,6 +69,16 @@ inline static std::istream& operator>>(std::istream& stream, vec2& v)
     return stream >> v.x >> v.y;
 }
 
+std::string dirpath(std::string filepath)
+{
+    std::size_t found = filepath.rfind("/");
+    if (found == std::string::npos)
+        exit(-1);
+
+    filepath.erase(filepath.begin() + found + 1, filepath.end());
+    return filepath;
+}
+
 inline void readOBJFile(const std::string& url, PathTrace::Mesh& mesh)
 {
     if(url == "")
@@ -132,6 +142,18 @@ inline static void readBackground(std::istream& stream, Scene& s)
     s.setBackground(background);
 }
 
+inline static void readAmbient(std::istream& stream, Scene& s)
+{
+    float Ia;
+    stream >> Ia;
+    s.Ia = Ia;
+}
+
+inline static void readLight(std::istream& stream, Scene& s)
+{
+    // TODO
+}
+
 inline static void readQuadric(std::istream& stream, Scene& s)
 {
     float a, b, c, d, e, f, g, h, j, k;
@@ -179,16 +201,6 @@ inline static void readTonemapping(std::istream& stream, ImageBuffer& image)
     image.setTonemapping(tonemapping);
 }
 
-std::string dirpath(std::string filepath)
-{
-    std::size_t found = filepath.rfind("/");
-    if (found == std::string::npos)
-        exit(-1);
-
-    filepath.erase(filepath.begin() + found + 1, filepath.end());
-    return filepath;
-}
-
 void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, PathTrace::Scene& s)
 {
     std::ifstream stream;
@@ -228,6 +240,12 @@ void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, Pa
         }
         else if (option == "tonemapping") {
             readTonemapping(ss, image);
+        }
+        else if (option == "ambient") {
+            readAmbient(ss, s);
+        }
+        else if (option == "light") {
+            readLight(ss, s);
         }
         else if (option != "") {
             std::cerr << "[WARNING] Ignoring option " << option << std::endl;
