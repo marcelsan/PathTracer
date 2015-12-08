@@ -13,6 +13,7 @@ set(pathtracer_SRCS
     sdlreader.cpp
     ray.cpp
     raytrace.cpp
+    light.cpp
     main.cpp
 )
 

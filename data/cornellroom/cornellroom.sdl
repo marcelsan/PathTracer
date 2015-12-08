@@ -12,7 +12,8 @@ background 0.0 0.0 0.0
 ambient 0.5
 
 # Luz branca retangulo no centro do teto
-light luzcornell.obj 1.0 1.0 1.0 1.0
+# light luzcornell.obj 1.0 1.0 1.0 1.0
+light 1 2.0 0.5 1
 
 npaths 10
 tonemapping 1.0
