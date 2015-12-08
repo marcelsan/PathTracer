@@ -114,6 +114,13 @@ inline static Material readMaterial(std::istream& stream)
     return Material(color, ka, kd, ks, kt, n);
 }
 
+inline static void readBackground(std::istream& stream, Scene& s)
+{
+    color background;
+    stream >> background;
+    s.setBackground(background);
+}
+
 inline static void readQuadric(std::istream& stream, Scene& s)
 {
     float a, b, c, d, e, f, g, h, j, k;
@@ -183,12 +190,11 @@ void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, Pa
             // TODO: read until next line
             continue;
         }
-
-        if (option == "objectquadric") {
-            readQuadric(ss, s);
-        } 
         else if (option == "background") {
-            // TODO
+            readBackground(ss, s);
+        }
+        else if (option == "objectquadric") {
+            readQuadric(ss, s);
         }
         else if (option ==  "eye") {
             readEye(ss, cam);
