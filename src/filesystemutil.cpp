@@ -218,6 +218,9 @@ void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, Pa
         else if (option == "tonemapping") {
             readTonemapping(ss, image);
         }
+        else if (option != "") {
+            std::cerr << "[WARNING] Ignoring option " << option << std::endl;
+        }
     }
 
     stream.close();
