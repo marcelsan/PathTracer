@@ -1,9 +1,4 @@
-# Tentativa :-) de arquivo sdl para Cornell Room
 # Marcelo Walter
-# Nov. 2005
-# Este arquivo NAO foi testado!!!
-# Modificado de acordo com os testes
-# do Vinicius 6/12/2005
 
 eye 0.0 0.0 5.7
 size 200 200
@@ -19,7 +14,7 @@ tonemapping 1.0
 seed 9
 
 # left wall RED
-objectquadric 1 1 1 0 0 0 0 0 0 -1 1.0 1.0 0.0 1.0 1.0 2.0 1.0 10
+#objectquadric 1 1 1 0 0 0 0 0 0 -1 1.0 1.0 0.0 1.0 1.0 2.0 1.0 10
 
 # cube
-object venus.obj 1.0 1.0 1.0 0.3 0.7 0 0 5
+object cube3.obj 1.0 1.0 1.0 0.3 0.7 0 0 5
