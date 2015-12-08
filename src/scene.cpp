@@ -39,4 +39,9 @@ bool Scene::raycast(const Ray& ray, Intersection& closestInter) const
     return any_intersection;
 }
 
+void Scene::setBackground(const color& c)
+{
+    bg = c;
+}
+
 }

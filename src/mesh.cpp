@@ -1,8 +1,37 @@
 #include "mesh.h"
 
+using namespace glm;
+
 namespace PathTrace {
 
+void Mesh::Triangle::setA(const Vertex& v)
+{
+    a = v.v;
+    na = v.n;
+    ta = v.t;
+}
+
+void Mesh::Triangle::setB(const Vertex& v)
+{
+    b = v.v;
+    nb = v.n;
+    tb = v.t;
+}
+
+void Mesh::Triangle::setC(const Vertex& v)
+{
+    c = v.v;
+    nc = v.n;
+    tc = v.t;
+}
+
+bool Mesh::Triangle::hasNormal() const
+{
+    return (na != -1) && (nb != -1) && (nc != -1);
+}
+
 Mesh::Mesh()
+    : Object()
 {
 
 }
@@ -10,12 +39,10 @@ Mesh::Mesh()
 Mesh::Mesh(const Material& m)
     : Object(m)
 {
-
-};
+}
 
 Mesh::~Mesh()
 {
-
 }
 
 bool Mesh::intersect(const Ray& ray, Intersection& inter) const
@@ -23,7 +50,7 @@ bool Mesh::intersect(const Ray& ray, Intersection& inter) const
     float closest_distance = FLT_MAX;
     bool any_intersection = false;
     
-    for(const auto& tr : triangles) {
+    for (const auto& tr : triangles) {
         float r, a, b;
         glm::vec3 u = vertices[tr.b] - vertices[tr.a];
         glm::vec3 v = vertices[tr.c] - vertices[tr.a];
@@ -89,16 +116,20 @@ void Mesh::addTriangle(Triangle t)
     triangles.push_back(t);
 }
 
-void Mesh::addNormal(vec3 n)
+unsigned int Mesh::addNormal(vec3 n)
 {
     normals.push_back(n);
+    return normals.size() - 1;
 }
 
-void Mesh::resetObject()
+void Mesh::calculateNormals()
 {
-    this->vertices.clear();
-    this->triangles.clear();
-    this->normals.clear();
+    for (auto& t : triangles) {
+        vec3 ab = vertices[t.b] - vertices[t.a];
+        vec3 ac = vertices[t.c] - vertices[t.a];
+        unsigned int n = addNormal(cross(ab, ac));
+        t.na = t.nb = t.nc = n;
+    }
 }
 
 std::ostream& operator<<(std::ostream &output, const Mesh& m)

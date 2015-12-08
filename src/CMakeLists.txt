@@ -6,14 +6,14 @@ set(pathtracer_SRCS
     quadric.cpp
     box.cpp
     camera.cpp
-	imagebuffer.cpp
+    imagebuffer.cpp
     mesh.cpp
-	scene.cpp
-	material.cpp
-    filesystemutil.cpp
+    scene.cpp
+    material.cpp
+    sdlreader.cpp
     ray.cpp
     raytrace.cpp
-	main.cpp
+    main.cpp
 )
 
 add_executable(pathtracer ${pathtracer_SRCS})
