@@ -27,7 +27,7 @@ int main(int argc, char const *argv[])
     ImageBuffer ib(100, 100);
 
     std::string path(argv[1]);
-    FileSystemUtil::readSDLFile(path, cam, s);
+    FileSystemUtil::readSDLFile(path, ib, cam, s);
 
     raytrace(ib, s, cam);
 

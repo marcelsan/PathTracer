@@ -15,15 +15,10 @@ private:
     std::size_t h;
 
 public:
-    ImageBuffer(std::size_t width, std::size_t height)
-        : buffer(width * height)
-        , w(width)
-        , h(height)
-    {
-    }
-
+    ImageBuffer(std::size_t width, std::size_t height);
     std::size_t width() const { return w; }
     std::size_t height() const { return h; }
+    void setSize(std::size_t width, std::size_t height);
     color& operator()(std::size_t i, std::size_t j) { return buffer[i * w + j]; };
     const color& operator()(std::size_t i, std::size_t j) const { return buffer[i * w + j]; };
     void clear(const color& c);

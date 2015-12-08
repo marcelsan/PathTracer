@@ -147,6 +147,13 @@ inline static void readMesh(const std::string& path, std::istream& stream, Scene
     s.add(std::move(mesh));
 }
 
+inline static void readSize(std::istream& stream, ImageBuffer& image)
+{
+    size_t w, h;
+    stream >> w >> h;
+    image.setSize(w, h);
+}
+
 std::string dirpath(std::string filepath)
 {
     std::size_t found = filepath.rfind("/");
@@ -157,7 +164,7 @@ std::string dirpath(std::string filepath)
     return filepath;
 }
 
-void readSDLFile(const std::string& sdlpath, Camera& cam, PathTrace::Scene& s)
+void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, PathTrace::Scene& s)
 {
     std::ifstream stream;
     load(sdlpath, stream);
@@ -191,6 +198,9 @@ void readSDLFile(const std::string& sdlpath, Camera& cam, PathTrace::Scene& s)
         }
         else if (option == "object") {
             readMesh(path, ss, s);
+        }
+        else if (option == "size") {
+            readSize(ss, image);
         }
     }
 

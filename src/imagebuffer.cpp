@@ -4,6 +4,20 @@
 
 namespace PathTrace {
 
+ImageBuffer::ImageBuffer(std::size_t width, std::size_t height)
+    : buffer(width * height)
+    , w(width)
+    , h(height)
+{
+}
+
+void ImageBuffer::setSize(std::size_t width, std::size_t height)
+{
+    w = width;
+    h = height;
+    buffer.resize(w * h);
+}
+
 void ImageBuffer::clear(const color& c)
 {
     for (auto& bc : buffer)
