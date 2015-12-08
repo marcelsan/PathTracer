@@ -20,27 +20,30 @@ Mesh::~Mesh()
 
 bool Mesh::intersect(const Ray& ray, Intersection& inter) const
 {
+    float closest_distance = FLT_MAX;
+    bool any_intersection = false;
+    
     for(const auto& tr : triangles) {
         float r, a, b;
         glm::vec3 u = vertices[tr.b] - vertices[tr.a];
         glm::vec3 v = vertices[tr.c] - vertices[tr.a];
         glm::vec3 n = glm::cross(u, v);
 
-        glm::vec3 dir = ray.d - ray.o;             
+        glm::vec3 dir = ray.d;             
         glm::vec3 w0  = ray.o - vertices[tr.a];
         a = -glm::dot(n, w0);
         b = glm::dot(n, dir);
 
-        if (fabs(b) < FLT_MIN) 
+        if (fabs(b) < 0.00000001) 
             continue;              
 
         r = a / b;
         if (r < 0.0)                    
             continue;                   
         
-        glm::vec3 i = ray.o + r * dir;
+        glm::vec3 i = ray.o + r * dir; // ponto de intersecao
 
-        float    uu, uv, vv, wu, wv, D;
+        float uu, uv, vv, wu, wv, D;
         uu = glm::dot(u,u);
         uv = glm::dot(u,v);
         vv = glm::dot(v,v);
@@ -53,17 +56,27 @@ bool Mesh::intersect(const Ray& ray, Intersection& inter) const
         s = (uv * wv - vv * wu) / D;
         if (s < 0.0 || s > 1.0)         
             continue;
-        t = (uv * wu - uu * wv) / D;
+        
+        t = (uv * wu - uu * wv) / D;     
         if (t < 0.0 || (s + t) > 1.0)
-            continue ;
+            continue;
 
-        inter.n = (1 - s - t) * normals[tr.na] + s * normals[tr.nb] + t * normals[tr.nc];
+        float d = glm::distance(i, ray.o);
+        if(d > closest_distance) 
+            continue;
+
+        closest_distance = d;
+        any_intersection = true;
+
+        inter.n = glm::normalize(
+                    (1 - s - t) * normals[tr.na] + 
+                    s * normals[tr.nb] + 
+                    t * normals[tr.nc]);
+
         inter.p = i;
-
-        return true;
     }
 
-    return false;
+    return any_intersection;
 }
 
 void Mesh::addVertex(vec3 v)
