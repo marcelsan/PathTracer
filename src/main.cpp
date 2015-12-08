@@ -6,7 +6,7 @@
 
 #include "scene.h"
 #include "imagebuffer.h"
-#include "filesystemutil.h"
+#include "sdlreader.h"
 #include "raytrace.h"
 
 using namespace glm;
@@ -27,7 +27,7 @@ int main(int argc, char const *argv[])
     ImageBuffer ib(100, 100);
 
     std::string path(argv[1]);
-    FileSystemUtil::readSDLFile(path, ib, cam, s);
+    SDLReader::readSDLFile(path, ib, cam, s);
 
     raytrace(ib, s, cam);
 

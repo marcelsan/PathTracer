@@ -1,4 +1,4 @@
-#include "filesystemutil.h"
+#include "sdlreader.h"
 
 #include <iostream>
 #include <fstream>
@@ -9,9 +9,9 @@
 #include "object.h"
 #include "mesh.h"
 
-using namespace PathTrace;
+namespace PathTrace {
 
-namespace FileSystemUtil {
+namespace SDLReader {
 
 inline static void load(const std::string& url, std::ifstream& stream)
 {
@@ -24,8 +24,6 @@ inline static void load(const std::string& url, std::ifstream& stream)
         exit(-1);
     }
 }
-
-
 
 inline static unsigned int mtoi(const std::ssub_match& m)
 {
@@ -237,6 +235,8 @@ void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, Pa
     }
 
     stream.close();
+}
+
 }
 
 }
