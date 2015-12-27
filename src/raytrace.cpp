@@ -16,6 +16,11 @@ inline static color raycast(const Ray& ray, const Scene& scene, int depth = 0)
     color c = black;
     for (auto& light : scene.getLights()) {
         Material mat = inter.m;
+        if (mat.emissive) {
+            c += mat.color;
+            continue;
+        }
+
         color lightColor = light->emissionColor();
         vec3 lpos = light->samplePosition();
         vec3 L = normalize(lpos - inter.p);
