@@ -149,13 +149,17 @@ inline static void readAmbient(std::istream& stream, Scene& s)
     s.setIa(Ia);
 }
 
-inline static void readLight(std::istream& stream, Scene& s)
+inline static void readLight(const std::string& path, std::istream& stream, Scene& s)
 {
-    vec3 dir;
+    color c;
     float Ip;
-    stream >> dir >> Ip;
-    // XXX: still does not support luminous mesh objects
-    s.addLight(std::unique_ptr<Light>(new DirectionalLight(dir, color(1.0f, 1.0f, 1.0f))));
+    std::string filename;
+    stream >> filename >> c >> Ip;
+
+    std::unique_ptr<Mesh> mesh(new Mesh());
+    readOBJFile(path + filename, *mesh);
+    s.addLight(std::unique_ptr<Light>(new SingleColorLight(mesh.get(), color(1.0f, 1.0f, 1.0f))));
+    s.add(std::move(mesh));
 }
 
 inline static void readQuadric(std::istream& stream, Scene& s)
@@ -249,7 +253,7 @@ void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, Pa
             readAmbient(ss, s);
         }
         else if (option == "light") {
-            readLight(ss, s);
+            readLight(path, ss, s);
         }
         else if (option != "") {
             std::cerr << "[WARNING] Ignoring option " << option << std::endl;

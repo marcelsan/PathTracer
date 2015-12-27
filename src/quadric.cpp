@@ -96,6 +96,11 @@ bool Quadric::intersect(const Ray& ray, Intersection& inter) const
     return true;
 }
 
+vec3 Quadric::samplePosition() const
+{
+    return vec3(); // XXX
+}
+
 const vec3 Quadric::normal(vec3 point) const
 {
     const float x = point.x;

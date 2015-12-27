@@ -2,6 +2,8 @@
 #define MESH_H
 
 #include "object.h"
+#include "material.h"
+#include "intersection.h"
 #include <cfloat>
 
 using namespace glm;
@@ -31,6 +33,7 @@ public:
     Mesh(const Material& m);
     virtual ~Mesh();
     bool intersect(const Ray& ray, Intersection& inter) const;
+    vec3 samplePosition() const;
     void addVertex(vec3 vertex);
     void addTriangle(Triangle t);
     unsigned int addNormal(vec3 normal);

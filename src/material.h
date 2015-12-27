@@ -11,7 +11,6 @@ public:
     Material();
     Material(vec3 color, float ka, float kd, float ks, float kt, int n);
 
-private:
     vec3 color;
     float ka, kd, ks, kt;
     int n;

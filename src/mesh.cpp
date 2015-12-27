@@ -101,9 +101,15 @@ bool Mesh::intersect(const Ray& ray, Intersection& inter) const
                     t * normals[tr.nc]);
 
         inter.p = i;
+        inter.m = material();
     }
 
     return any_intersection;
+}
+
+vec3 Mesh::samplePosition() const
+{
+    return vertices[0]; // XXX
 }
 
 void Mesh::addVertex(vec3 v)
