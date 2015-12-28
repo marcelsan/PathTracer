@@ -39,17 +39,16 @@ inline static color raycast(const Ray& ray, const Scene& scene, int depth = 0)
             shadowed = false;
         }
 
-        if (shadowed)
-            continue;
-
-        float NL = dot(N, L);
-        if (NL > 0)
-            c += NL * mat.kd * lightColor * mat.color;
+        if (!shadowed) {
+            float NL = dot(N, L);
+            if (NL > 0)
+                c += NL * mat.kd * lightColor * mat.color;
+        }
 
         if (depth > 0) {
             if (mat.ks > 0)
                 c += mat.ks * raycast(inter.rayTo(R), scene, depth - 1);
-        } else {
+        } else if (!shadowed) {
             float LR = dot(L, R);
             if (LR > 0)
                 c += mat.ks * float(pow(LR, mat.n)) * lightColor;
