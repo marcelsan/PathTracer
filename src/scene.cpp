@@ -32,6 +32,7 @@ bool Scene::raycast(const Ray& ray, Intersection& closestInter) const
 
         closest_distance = d;
         closestInter = inter;
+        closestInter.o = o.get();
         any_intersection = true;
     }
 

@@ -7,6 +7,7 @@ set(pathtracer_SRCS
     box.cpp
     camera.cpp
     imagebuffer.cpp
+    intersection.cpp
     mesh.cpp
     scene.cpp
     material.cpp

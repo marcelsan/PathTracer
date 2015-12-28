@@ -36,7 +36,7 @@ inline static color raycast(const Ray& ray, const Scene& scene, int depth = 0)
 
         if (depth > 0) {
             if (mat.ks > 0)
-                c += mat.ks * raycast({inter.p + inter.n * 0.00001f, R}, scene, depth - 1);
+                c += mat.ks * raycast(inter.rayTo(R), scene, depth - 1);
         } else {
             float LR = dot(L, R);
             if (LR > 0)
