@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <limits>
 #include "camera.h"
 #include "color.h"
 #include "object.h"
@@ -27,7 +28,7 @@ public:
     void setIa(float ia) { Ia = ia; }
     const std::vector<std::unique_ptr<Light>>& getLights() const;
     void add(std::unique_ptr<Object> o);
-    bool raycast(const Ray& ray, Intersection& inter) const;
+    bool raycast(const Ray& ray, Intersection& inter, float limit = std::numeric_limits<float>::max()) const;
     void setBackground(const color& c);
     const color& background() const { return bg; }
 };

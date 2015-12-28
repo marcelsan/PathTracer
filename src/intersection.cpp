@@ -3,6 +3,6 @@
 namespace PathTrace {
 Ray Intersection::rayTo(vec3 dir) const
 {
-	return {p + dir * 0.00000001f, dir};
+	return {p + n * 0.000001f, dir};
 }
 }

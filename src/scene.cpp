@@ -1,7 +1,6 @@
 #include "scene.h"
 
 #include <glm/glm.hpp>
-#include <limits>
 
 using namespace glm;
 
@@ -16,9 +15,8 @@ void Scene::add(std::unique_ptr<Object> o)
     objects.push_back(std::move(o));
 }
 
-bool Scene::raycast(const Ray& ray, Intersection& closestInter) const
+bool Scene::raycast(const Ray& ray, Intersection& closestInter, float closest_distance) const
 {
-    float closest_distance =  std::numeric_limits<float>::max();
     bool any_intersection = false;
 
     for (auto const& o : objects) {
