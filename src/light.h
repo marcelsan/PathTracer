@@ -12,13 +12,14 @@ class Object;
 
 class Light
 {
-protected:
-    Object* object;
+private:
+    Object* obj;
 
 public:
-    Light(Object* o = nullptr) : object(o) { }
+    Light(Object* o = nullptr) : obj(o) { }
     virtual ~Light() = default;
 
+    Object* object() const { return obj; }
     virtual color emissionColor() const = 0;
     virtual vec3 samplePosition() const;
 };

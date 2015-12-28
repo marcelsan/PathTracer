@@ -6,7 +6,7 @@ namespace PathTrace {
 
 vec3 Light::samplePosition() const
 {
-    return object->samplePosition();
+    return object()->samplePosition();
 }
 
 }
