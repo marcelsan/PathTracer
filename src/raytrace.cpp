@@ -13,22 +13,22 @@ inline static color raycast(const Ray& ray, const Scene& scene, int depth = 0)
     if (!scene.raycast(ray, inter))
         return scene.background();
 
-    color c = black;
-    for (auto& light : scene.getLights()) {
-        Material mat = inter.m;
-        if (mat.emissive) {
-            c += mat.color;
-            continue;
-        }
+    Material mat = inter.m;
+    color c = mat.ka * mat.color;
 
-        color lightColor = light->emissionColor();
+    if (mat.emissive) {
+        c += mat.color;
+        return c;
+    }
+
+    for (auto& light : scene.getLights()) {
         vec3 lpos = light->samplePosition();
         vec3 L = normalize(lpos - inter.p);
+
+        color lightColor = light->emissionColor();
         vec3 N = normalize(inter.n);
         vec3 V = normalize(ray.d);
         vec3 R = reflect(V, N);
-
-        c += mat.ka * mat.color;
 
         float NL = dot(N, L);
         if (NL > 0)
