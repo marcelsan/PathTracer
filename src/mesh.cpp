@@ -1,4 +1,6 @@
 #include "mesh.h"
+#include <random>
+#include <cmath>
 
 using namespace glm;
 
@@ -109,7 +111,16 @@ bool Mesh::intersect(const Ray& ray, Intersection& inter) const
 
 vec3 Mesh::samplePosition() const
 {
-    return vertices[0]; // XXX
+    static std::uniform_int_distribution<int> tDist(0, triangles.size() - 1);
+    static std::uniform_real_distribution<float> vDist(0.0f, 1.0f);
+    static std::default_random_engine generator(0);
+    const Triangle& t = triangles[tDist(generator)];
+    float sqrtr1 = sqrt(vDist(generator));
+    float r2 = vDist(generator);
+    float alfa = 1.0f - sqrtr1;
+    float beta = (1 - r2) * sqrtr1;
+    float gama = r2 * sqrtr1;
+    return alfa * vertices[t.a] + beta * vertices[t.b] + gama * vertices[t.c];
 }
 
 void Mesh::addVertex(vec3 v)
