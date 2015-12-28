@@ -11,7 +11,7 @@ Ray Camera::ray(float i, float j) const
     vec2 clip = clipMax - clipMin;
     vec3 dest = vec3(clipMin.x, clipMin.y, 0) + vec3(clip.x * j, clip.y * (1.0f - i), 0);
 
-    return {eye, dest - eye, nullptr};
+    return {eye, dest - eye};
 }
 
 void Camera::setEye(const vec3& e)
