@@ -43,7 +43,7 @@ object back.obj 1.0 1.0 1.0 0.3 0.7 0 0 5
 object ceiling.obj 1.0 1.0 1.0 0.3 0.7 0 0 5
 
 # cube 1 WHITE
-object cube1.obj 1.0 1.0 1.0 0.3 0.7 0 0 5
+object cube1.obj 1.0 1.0 1.0 0.3 0.7 0 0 5 1.5
 
 # cube 2 WHITE
 object cube2.obj 1.0 1.0 1.0 0.3 0.7 0 0 5

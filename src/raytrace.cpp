@@ -49,6 +49,19 @@ inline static color raycast(const Ray& ray, const Scene& scene, int depth = 0)
         if (depth > 0) {
             if (mat.ks > 0)
                 c += mat.ks * raycast(inter.rayTo(R), scene, depth - 1);
+
+            // transmitted portion 
+            if (mat.ir > 0) {
+                float cosI = dot(N, L);
+                float sinT2 = (1.0 - pow(cosI, 2))/pow(mat.ir, 2);
+                
+                if(sinT2 < 1.0f || fabs(sinT2 - 1.0f) < 0.0000001) {
+                    float cosT = sqrt(1 - sinT2);
+                    vec3 T = -L/mat.ir + (cosI/mat.ir - cosT)*N;
+                    c += mat.kt * raycast(inter.rayTo(T), scene, depth - 1);
+                }
+            }
+
         } else if (!shadowed) {
             float LR = dot(L, R);
             if (LR > 0)
