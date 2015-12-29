@@ -1,0 +1,23 @@
+eye 0.0 0.0 5.0
+size 400 400
+ortho -1 -1 1 1
+ambient 0.5
+#
+# light definition
+# x y z  intensity
+light 0.0 1.0 1.0 1.0
+#object definition
+#        a   b   c   d   e   f   g   h    j    k   R   G   B  Ka  Kd  Ks n KS KT ir
+#
+objectquadric 1.0 1.0 1.0 0.0 0.0 0.0 0.0 -0.75 1.5 2.60 1.0 0.0 0.0 0.0 0.6 0.4 1 0.8 0
+#
+objectquadric 1.0 1.0 1.0 0.0 0.0 0.0 0.75 0.0 1.5 2.60 1.0 0.0 0.0 0.0 0.6 0.4 2 0.8 0
+#
+objectquadric 1.0 1.0 1.0 0.0 0.0 0.0 -0.75 0.0 1.5 2.60 1.0 0.0 0.0 0.0 0.6 0.4 7 0.8 0
+#
+objectquadric 1.0 1.0 1.0 0.0 0.0 0.0 0.0 0.75 1.5 2.60 1.0 0.0 0.0 0.0 0.6 0.4 15 0.8 0
+# background color
+background 0.5 0.5 1.0
+profundidade 1
+supersample off
+output recur1.pnm
