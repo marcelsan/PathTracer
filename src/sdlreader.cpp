@@ -125,14 +125,15 @@ inline void readOBJFile(const std::string& url, PathTrace::Mesh& mesh)
 inline static Material readMaterial(std::istream& stream)
 {
     vec3 color;
-    float ka, kd, ks, kt;
+    float ka, kd, ks, kt, ir = -1.0f;
     int n;
 
     stream >> color;
     stream >> ka >> kd >> ks >> kt;
     stream >> n;
+    stream >> ir;
 
-    return Material(color, ka, kd, ks, kt, n);
+    return Material(color, ka, kd, ks, kt, n, ir);
 }
 
 inline static void readBackground(std::istream& stream, Scene& s)
