@@ -21,15 +21,16 @@ inline static color raycast(const Ray& ray, const Scene& scene, int depth = 0)
         return c;
     }
 
+    vec3 N = normalize(inter.n);
+    vec3 V = normalize(ray.d);
+    vec3 R = reflect(V, N);
+
     for (auto& light : scene.getLights()) {
         vec3 lpos = light->samplePosition();
         color lightColor = light->emissionColor();
         vec3 l = lpos - inter.p;
         vec3 L = normalize(l);
-        vec3 N = normalize(inter.n);
-        vec3 V = normalize(ray.d);
-        vec3 R = reflect(V, N);
-
+    
         Intersection shadow;
         bool shadowed = true;
         if (scene.raycast(inter.rayTo(L), shadow, length(l) - 0.00001f)) {
