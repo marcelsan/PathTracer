@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <regex>
+#include <string>
 #include "quadric.h"
 #include "camera.h"
 #include "object.h"
@@ -152,15 +153,27 @@ inline static void readAmbient(std::istream& stream, Scene& s)
 
 inline static void readLight(const std::string& path, std::istream& stream, Scene& s)
 {
-    color c;
+    vec3 v;
     float Ip;
+    std::string strstream;
     std::string filename;
-    stream >> filename >> c >> Ip;
-    Material mat(c, 0, 0, 0, 0, 2, true);
-    std::unique_ptr<Mesh> mesh(new Mesh(mat));
-    readOBJFile(path + filename, *mesh);
-    s.addLight(std::unique_ptr<Light>(new SingleColorLight(mesh.get(), color(1.0f, 1.0f, 1.0f))));
-    s.add(std::move(mesh));
+
+    std::getline(stream, strstream);
+    std::size_t found = strstream.find(std::string(".obj"));
+    std::stringstream ss(strstream);
+
+    if (found != std::string::npos) {
+        ss >> filename >> v >> Ip;
+
+        Material mat(v, 0, 0, 0, 0, 2, true);
+        std::unique_ptr<Mesh> mesh(new Mesh(mat));
+        readOBJFile(path + filename, *mesh);
+        s.addLight(std::unique_ptr<Light>(new SingleColorLight(mesh.get(), color(1.0f, 1.0f, 1.0f))));
+        s.add(std::move(mesh));
+    } else {
+        ss >> v >> Ip;
+        s.addLight(std::unique_ptr<Light>(new DirectionalLight(v, Ip)));
+    }
 }
 
 inline static void readQuadric(std::istream& stream, Scene& s)

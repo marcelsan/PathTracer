@@ -38,6 +38,17 @@ protected:
     color emissionColor() const override { return cl; }
 };
 
+class DirectionalLight : public Light
+{
+public:
+    DirectionalLight(vec3 d, float ip) : direction(d), ip(ip) { }
+    vec3 direction;
+    float ip;
+
+    vec3 samplePosition() const { return direction; };
+    color emissionColor() const override { return {}; }
+};
+
 }
 
 #endif
