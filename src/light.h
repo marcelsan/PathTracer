@@ -12,16 +12,18 @@ class Object;
 
 class Light
 {
-private:
-    Object* obj;
-
 public:
-    Light(Object* o = nullptr) : obj(o) { }
+    Light(bool d = false, Object* o = nullptr) : directional(d), obj(o) { }
     virtual ~Light() = default;
 
+    bool directional;
     Object* object() const { return obj; }
+    virtual vec3 direction() const = 0;
     virtual color emissionColor() const = 0;
     virtual vec3 samplePosition() const;
+
+private:
+    Object* obj;
 };
 
 class SingleColorLight : public Light
@@ -30,9 +32,10 @@ private:
     color cl;
 public:
     SingleColorLight(Object* o = nullptr, color c = {})
-        : Light(o)
+        : Light(false, o)
         , cl(c)
     { }
+    vec3 direction() const { return {}; }
     virtual ~SingleColorLight() = default;
 protected:
     color emissionColor() const override { return cl; }
@@ -41,12 +44,17 @@ protected:
 class DirectionalLight : public Light
 {
 public:
-    DirectionalLight(vec3 d, float ip) : direction(d), ip(ip) { }
-    vec3 direction;
+    DirectionalLight(vec3 d, float ip) 
+        : Light(true)
+        , dir(d)
+        , ip(ip) { }
+
+    vec3 dir;
     float ip;
 
-    vec3 samplePosition() const { return direction; };
-    color emissionColor() const override { return {}; }
+    vec3 samplePosition() const { return {}; }
+    vec3 direction() const { return dir; }
+    color emissionColor() const override { return {ip * 1.0f, ip * 1.0f, ip * 1.0f}; }
 };
 
 }

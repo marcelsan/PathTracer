@@ -31,9 +31,16 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr, int
     vec3 R = reflect(V, N);
 
     for (auto& light : scene.getLights()) {
-        vec3 lpos = light->samplePosition(); // verify segmentation fault
+        vec3 l;
         color lightColor = light->emissionColor();
-        vec3 l = lpos - inter.p;
+
+        if(!light->directional) {
+            vec3 lpos = light->samplePosition();
+            l = lpos - inter.p;
+        } else {
+            l = light->direction();
+        }
+
         vec3 L = normalize(l);
 
         Intersection shadow;
@@ -44,6 +51,7 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr, int
         } else {
             shadowed = false;
         }
+
         if (!shadowed) {
             float NL = dot(N, L);
             if (NL > 0)
