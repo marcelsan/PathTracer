@@ -12,7 +12,7 @@ inline static bool fcmp(float a, float b, float epsilon = 0.000001f)
     return (fabs(a - b) < epsilon);
 }
 
-inline static color raycast(const Ray& ray, const Scene& scene, float srcIr, int depth = 0)
+inline static color raycast(const Ray& ray, const Scene& scene, float srcIr, int depth = 5)
 {
     Intersection inter;
     if (!scene.raycast(ray, inter))
@@ -59,8 +59,9 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr, int
         }
 
         if (depth > 0) {
-            if (mat.ks > 0)
+            if (mat.ks > 0) {
                 c += mat.ks * raycast(inter.rayTo(R), scene, srcIr, depth - 1);
+            }
 
             // transmitted portion 
             if (mat.ir > 0) {
@@ -68,13 +69,13 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr, int
                 if(fcmp(srcIr, mat.ir))
                     n2 = 1.0f;
 
-                float n = n1 / n2;
-                float cosI = dot(N, L);
-                float sinT2 = n * n * (1.0 - pow(cosI, 2));
+                const float n = n1 / n2;
+                const float cosI = -dot(N, V);
+                const float sinT2 = n * n * (1.0 - pow(cosI, 2));
                 
                 if(sinT2 < 1.0f || fcmp(sinT2, 1.0f)) {
-                    float cosT = sqrt(1 - sinT2);
-                    vec3 T = -L * n + (n * cosI - cosT) * N;
+                    const float cosT = sqrt(1 - sinT2);
+                    vec3 T = V * n + (n * cosI - cosT) * N;
                     c += mat.kt * raycast(inter.rayTo(T), scene, mat.ir, depth - 1);
                 }
             }

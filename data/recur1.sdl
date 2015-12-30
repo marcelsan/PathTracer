@@ -7,15 +7,21 @@ ambient 0.5
 # x y z  intensity
 light 0.0 1.0 1.0 1.0
 #object definition
-#        a   b   c   d   e   f   g   h    j    k   R   G   B  Ka  Kd  Ks n KS KT ir
+#        a   b   c   d   e   f   g   h    j    k   R   G   B  Ka  Kd  Ks kt n ir
 #
-objectquadric 1.0 1.0 1.0 0.0 0.0 0.0 0.0 -0.75 1.5 2.60 1.0 0.0 0.0 0.0 0.6 0.4 1 0.8 0
+#objectquadric 1.0 1.0 1.0 0.0 0.0 0.0 0.0 -0.75 1.5 2.60 1.0 0.0 0.0 0.0 0.6 0.4 1 0.8 0
 #
-objectquadric 1.0 1.0 1.0 0.0 0.0 0.0 0.75 0.0 1.5 2.60 1.0 0.0 0.0 0.0 0.6 0.4 2 0.8 0
+#objectquadric 1.0 1.0 1.0 0.0 0.0 0.0 0.75 0.0 1.5 2.60 1.0 0.0 0.0 0.0 0.6 0.4 2 0.8 0
 #
-objectquadric 1.0 1.0 1.0 0.0 0.0 0.0 -0.75 0.0 1.5 2.60 1.0 0.0 0.0 0.0 0.6 0.4 7 0.8 0
+#objectquadric 1.0 1.0 1.0 0.0 0.0 0.0 -0.75 0.0 1.5 2.60 1.0 0.0 0.0 0.0 0.6 0.4 7 0.8 0
 #
-objectquadric 1.0 1.0 1.0 0.0 0.0 0.0 0.0 0.75 1.5 2.60 1.0 0.0 0.0 0.0 0.6 0.4 15 0.8 0
+#objectquadric 1.0 1.0 1.0 0.0 0.0 0.0 0.0 0.75 1.5 2.60 1.0 0.0 0.0 0.0 0.6 0.4 15 0.8 0
+
+# Ax2 + By2 + Cz2 + Dxy+ Exz + Fyz + Gx + Hy + Iz + J = 0
+
+#objectquadric 1 1 1 0 0 0 0 0 10 24 1.0 1.0 1.0 0.0 0.3 0.0 1 1 1.55
+objectquadric 1 1 1 0 0 0 0 0 20 99 1.0 0.0 0.0 0.0 0.3 0.4 1 1 1.0
+
 # background color
 background 0.5 0.5 1.0
 profundidade 1
