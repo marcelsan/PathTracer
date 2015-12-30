@@ -26,7 +26,7 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr, int
         return c;
     }
 
-    vec3 N = normalize(inter.n);
+    vec3 N = inter.n;
     vec3 V = normalize(ray.d);
     vec3 R = reflect(V, N);
 

@@ -1,0 +1,20 @@
+# Marcelo Walter
+
+eye 0.0 0.0 5.7
+size 200 200
+ortho -1 -1 1 1
+background 1.0 1.0 1.0
+ambient 0.5
+
+# Luz branca retangulo no centro do teto
+light luzcornell.obj 1.0 1.0 1.0 1.0
+
+npaths 10
+tonemapping 1.0
+seed 9
+
+#        a   b   c   d   e   f   g   h    j    k   R   G   B  Ka  Kd  Ks n KS KT ir
+objectquadric 1 1 1 0 0 0 0 0 10 24 1.0 0.0 0.0 0.3 0.7 0 5 0.8 0
+
+# cube
+# object cube3.obj 1.0 1.0 1.0 0.3 0.7 0 0 5

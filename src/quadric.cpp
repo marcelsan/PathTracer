@@ -28,7 +28,7 @@ Quadric::~Quadric()
 }
 
 bool Quadric::intersect(const Ray& ray, Intersection& inter) const
-{
+{   
     float  acoef, bcoef, ccoef; // Intersection coefficents
     float  dx, dy, dz; // Direction - origin coordinates
     float  disc; // Distance to intersection
@@ -44,8 +44,7 @@ bool Quadric::intersect(const Ray& ray, Intersection& inter) const
     y0 = ray.o.y;
     z0 = ray.o.z;
 
-     // Ax2 + By2 + Cz2 + Dxy+ Exz + Fyz + Gx + Hy + Iz + J = 0
-
+    // Ax2 + By2 + Cz2 + Dxy+ Exz + Fyz + Gx + Hy + Iz + J = 0
     acoef = a * dx * dx +
             b * dy * dy +
             c * dz * dz +
@@ -92,6 +91,7 @@ bool Quadric::intersect(const Ray& ray, Intersection& inter) const
 
     inter.p = {x0 + t * dx, y0 + t * dy, z0 + t * dz};
     inter.n = normal(inter.p);
+    inter.m = material();
 
     return true;
 }
