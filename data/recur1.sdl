@@ -19,8 +19,8 @@ light 0.0 1.0 1.0 1.0
 
 # Ax2 + By2 + Cz2 + Dxy+ Exz + Fyz + Gx + Hy + Iz + J = 0
 
-#objectquadric 1 1 1 0 0 0 0 0 10 24 1.0 1.0 1.0 0.0 0.3 0.0 1 1 1.55
-objectquadric 1 1 1 0 0 0 0 0 20 99 1.0 0.0 0.0 0.0 0.3 0.4 1 1 1.0
+#objectquadric 1 1 1 0 0 0 0 0 10 24 1.0 1.0 1.0 0.0 0.3 0.0 1 1 1.5
+objectquadric 1 1 1 0 0 0 0 0 80 1599 1.0 0.0 0.0 0.0 0.3 0.4 1 1 1.1
 
 # background color
 background 0.5 0.5 1.0

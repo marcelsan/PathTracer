@@ -57,25 +57,24 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr, int
             if (NL > 0)
                 c += NL * mat.kd * lightColor * mat.color;
         }
+    }
 
-        if (depth > 0) {
-            if (mat.ks > 0)
-                c += mat.ks * raycast(inter.rayTo(R), scene, srcIr, depth - 1);
-        } else if (!shadowed) {
-            float LR = dot(L, R);
-            if (LR > 0)
-                c += mat.ks * float(pow(LR, mat.n)) * lightColor;
-        }
+    if (depth > 0) {
+        if (mat.ks > 0)
+            c += mat.ks * raycast(inter.rayTo(R), scene, srcIr, depth - 1);
     }
 
     if (mat.ir > 0) {
         float n1 = srcIr, n2 = mat.ir;
-        if(fcmp(srcIr, mat.ir))
+
+        if(fcmp(srcIr, mat.ir)) {
             n2 = 1.0f;
+            N = -N;
+        }
 
         const float n = n1 / n2;
         const float cosI = -dot(N, V);
-        const float sinT2 = n * n * (1.0 - pow(cosI, 2));
+        const float sinT2 = n * n * (1.0 - cosI * cosI);
         
         if(sinT2 < 1.0f || fcmp(sinT2, 1.0f)) {
             const float cosT = sqrt(1 - sinT2);
