@@ -162,10 +162,10 @@ inline static void readLight(const std::string& path, std::istream& stream, Scen
     std::size_t found = strstream.find(std::string(".obj"));
     std::stringstream ss(strstream);
 
-    if (found != std::string::npos) {
+    if (found != std::string::npos) { // has obj file
         ss >> filename >> v >> Ip;
 
-        Material mat(v, 0, 0, 0, 0, 2, true);
+        Material mat(v, 0, 0, 0, 0, 2, -1.0f, true);
         std::unique_ptr<Mesh> mesh(new Mesh(mat));
         readOBJFile(path + filename, *mesh);
         s.addLight(std::unique_ptr<Light>(new SingleColorLight(mesh.get(), color(1.0f, 1.0f, 1.0f))));

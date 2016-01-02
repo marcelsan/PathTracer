@@ -26,6 +26,7 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr, int
         return c;
     }
 
+    vec3 L;
     vec3 N = inter.n;
     vec3 V = normalize(ray.d);
     vec3 R = reflect(V, N);
@@ -35,13 +36,12 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr, int
         color lightColor = light->emissionColor();
 
         if(!light->directional) {
-            vec3 lpos = light->samplePosition();
-            l = lpos - inter.p;
+            l = light->samplePosition() - inter.p;
         } else {
             l = light->direction();
         }
 
-        vec3 L = normalize(l);
+        L = normalize(l);
 
         Intersection shadow;
         bool shadowed = true;
@@ -59,31 +59,28 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr, int
         }
 
         if (depth > 0) {
-            if (mat.ks > 0) {
+            if (mat.ks > 0)
                 c += mat.ks * raycast(inter.rayTo(R), scene, srcIr, depth - 1);
-            }
-
-            // transmitted portion 
-            if (mat.ir > 0) {
-                float n1 = srcIr, n2 = mat.ir;
-                if(fcmp(srcIr, mat.ir))
-                    n2 = 1.0f;
-
-                const float n = n1 / n2;
-                const float cosI = -dot(N, V);
-                const float sinT2 = n * n * (1.0 - pow(cosI, 2));
-                
-                if(sinT2 < 1.0f || fcmp(sinT2, 1.0f)) {
-                    const float cosT = sqrt(1 - sinT2);
-                    vec3 T = V * n + (n * cosI - cosT) * N;
-                    c += mat.kt * raycast(inter.rayTo(T), scene, mat.ir, depth - 1);
-                }
-            }
-
         } else if (!shadowed) {
             float LR = dot(L, R);
             if (LR > 0)
                 c += mat.ks * float(pow(LR, mat.n)) * lightColor;
+        }
+    }
+
+    if (mat.ir > 0) {
+        float n1 = srcIr, n2 = mat.ir;
+        if(fcmp(srcIr, mat.ir))
+            n2 = 1.0f;
+
+        const float n = n1 / n2;
+        const float cosI = -dot(N, V);
+        const float sinT2 = n * n * (1.0 - pow(cosI, 2));
+        
+        if(sinT2 < 1.0f || fcmp(sinT2, 1.0f)) {
+            const float cosT = sqrt(1 - sinT2);
+            vec3 T = V * n + (n * cosI - cosT) * N;
+            c += mat.kt * raycast(inter.rayTo(T), scene, mat.ir, depth - 1);
         }
     }
 
