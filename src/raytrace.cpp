@@ -145,7 +145,6 @@ void pathtrace(ImageBuffer &buffer, const Scene& scene, const Camera& cam)
     double h = buffer.height();
     for (unsigned i = 0; i < h; i++) {
         for (unsigned j = 0; j < w; j++) {
-            std::cerr << i << j << std::endl;
             color c = black;
             std::uniform_real_distribution<float> vDis(i / h, (i + 1) / h);
             std::uniform_real_distribution<float> hDis(j / w, (j + 1) / w);
