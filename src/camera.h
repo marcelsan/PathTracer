@@ -14,6 +14,8 @@ struct Camera
 public:
     void setEye(const vec3& eye);
     void setOrtho(const vec2& min, const vec2& max);
+    void setNPaths(unsigned n);
+    unsigned nPaths() const;
     Ray ray(float i, float j) const; // i and j must be between 0 and 1
 
 private:
@@ -21,6 +23,7 @@ private:
     vec2 clipMin = {-1.0, -1.0};
     vec2 clipMax = { 1.0,  1.0};
     float focusDistance = 1.0;
+    unsigned npaths;
 };
 
 }

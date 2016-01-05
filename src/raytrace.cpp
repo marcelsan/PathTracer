@@ -1,6 +1,7 @@
 #include "raytrace.h"
 #include <glm/glm.hpp>
 #include <cmath>
+#include <random>
 #include "ray.h"
 
 using namespace glm;
@@ -12,7 +13,7 @@ inline static bool fcmp(float a, float b, float epsilon = 0.000001f)
     return (fabs(a - b) < epsilon);
 }
 
-inline static color raycast(const Ray& ray, const Scene& scene, float srcIr, int depth = 5)
+inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.0f, int depth = 5)
 {
     Intersection inter;
     if (!scene.raycast(ray, inter))
@@ -93,7 +94,28 @@ void raytrace(ImageBuffer &buffer, const Scene& scene, const Camera& cam)
     for (size_t i = 0; i < h; i++) {
         for (size_t j = 0; j < w; j++) {
             Ray ray = cam.ray(i / (h - 1), j / (w - 1));
-            buffer(i, j) = raycast(ray, scene, 1.0f);
+            buffer(i, j) = raycast(ray, scene);
+        }
+    }
+}
+
+void pathtrace(ImageBuffer &buffer, const Scene& scene, const Camera& cam)
+{
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    double w = buffer.width();
+    double h = buffer.height();
+    for (unsigned i = 0; i < h; i++) {
+        for (unsigned j = 0; j < w; j++) {
+            std::cerr << i << j << std::endl;
+            color c = black;
+            std::uniform_real_distribution<float> vDis(i / h, (i + 1) / h);
+            std::uniform_real_distribution<float> hDis(j / w, (j + 1) / w);
+            for (unsigned n = 0; n < cam.nPaths(); n++) {
+                Ray ray = cam.ray(vDis(gen), hDis(gen));
+                c += raycast(ray, scene);
+            }
+            buffer(i, j) = c / float(cam.nPaths());
         }
     }
 }

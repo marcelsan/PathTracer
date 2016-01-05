@@ -25,4 +25,14 @@ void Camera::setOrtho(const vec2& min, const vec2& max)
     clipMax = max;
 }
 
+void Camera::setNPaths(unsigned n)
+{
+    npaths = n;
+}
+
+unsigned Camera::nPaths() const
+{
+    return npaths;
+}
+
 }

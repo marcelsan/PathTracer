@@ -191,6 +191,13 @@ inline static void readEye(std::istream& stream, Camera& cam)
     cam.setEye(eye);
 }
 
+inline static void readNPaths(std::istream& stream, Camera& cam)
+{
+    unsigned npaths;
+    stream >> npaths;
+    cam.setNPaths(npaths);
+}
+
 inline static void readOrtho(std::istream& stream, Camera& cam)
 {
     vec2 min, max;
@@ -250,6 +257,9 @@ void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, Pa
         }
         else if (option ==  "eye") {
             readEye(ss, cam);
+        }
+        else if (option ==  "npaths") {
+            readNPaths(ss, cam);
         }
         else if (option ==  "ortho") {
             readOrtho(ss, cam);

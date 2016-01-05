@@ -8,6 +8,7 @@
 namespace PathTrace {
 
 void raytrace(ImageBuffer &buffer, const Scene& scene, const Camera& cam);
+void pathtrace(ImageBuffer &buffer, const Scene& scene, const Camera& cam);
 
 }
 
