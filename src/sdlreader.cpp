@@ -168,7 +168,7 @@ inline static void readLight(const std::string& path, std::istream& stream, Scen
         Material mat(v, 0, 0, 0, 0, 2, -1.0f, true);
         std::unique_ptr<Mesh> mesh(new Mesh(mat));
         readOBJFile(path + filename, *mesh);
-        s.addLight(std::unique_ptr<Light>(new SingleColorLight(mesh.get(), color(1.0f, 1.0f, 1.0f))));
+        s.addLight(std::unique_ptr<Light>(new SingleColorLight(mesh.get(), color(1.0f, 1.0f, 1.0f), Ip)));
         s.add(std::move(mesh));
     } else {
         ss >> v >> Ip;

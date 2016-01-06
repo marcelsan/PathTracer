@@ -13,10 +13,11 @@ class Object;
 class Light
 {
 public:
-    Light(bool d = false, Object* o = nullptr) : directional(d), obj(o) { }
+    Light(bool d = false, float ip = 1.0f, Object* o = nullptr) : directional(d), ip(ip), obj(o) { }
     virtual ~Light() = default;
 
     bool directional;
+    float ip;
     Object* object() const { return obj; }
     virtual vec3 direction() const = 0;
     virtual color emissionColor() const = 0;
@@ -31,8 +32,8 @@ class SingleColorLight : public Light
 private:
     color cl;
 public:
-    SingleColorLight(Object* o = nullptr, color c = {})
-        : Light(false, o)
+    SingleColorLight(Object* o = nullptr, color c = {}, float ip = 1.0f)
+        : Light(false, ip, o)
         , cl(c)
     { }
     vec3 direction() const { return {}; }
@@ -45,12 +46,11 @@ class DirectionalLight : public Light
 {
 public:
     DirectionalLight(vec3 d, float ip) 
-        : Light(true)
+        : Light(true, ip)
         , dir(d)
-        , ip(ip) { }
+    { }
 
     vec3 dir;
-    float ip;
 
     vec3 samplePosition() const { return {}; }
     vec3 direction() const { return dir; }
