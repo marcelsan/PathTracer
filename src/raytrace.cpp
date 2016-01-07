@@ -13,7 +13,7 @@ inline static bool fcmp(float a, float b, float epsilon = 0.000001f)
     return (fabs(a - b) < epsilon);
 }
 
-inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.0f, int depth = 5)
+inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.0f, int depth = 2)
 {
     Intersection inter;
     if (!scene.raycast(ray, inter))
@@ -75,7 +75,7 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.
         static std::mt19937 gen(rd());
 
         std::uniform_real_distribution<float> rRay(0, ktot);
-        float r = rRay(gen);
+        const float r = rRay(gen);
 
         if(r < mat.kd)
             dRay = true;
@@ -96,11 +96,22 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.
             const float y = sin(phi) * sin(theta);
             const float z = cos(phi);
 
-            c += mat.kd * raycast(inter.rayTo(vec3(x,y,z)), scene, srcIr, depth - 1);
+            Intersection lightInter;
+            Ray to = inter.rayTo(vec3(x,y,z));
+            if (scene.raycast(to, lightInter) && lightInter.m.emissive)
+                return lightInter.m.color;
+
+            c += mat.kd * raycast(to, scene, srcIr, depth - 1);
         }
 
-        if (mat.ks > 0 && sRay)
-            c += mat.ks * raycast(inter.rayTo(R), scene, srcIr, depth - 1);
+        if (mat.ks > 0 && sRay) {
+            Intersection lightInter;
+            Ray to = inter.rayTo(R);
+            if (scene.raycast(to, lightInter) && lightInter.m.emissive)
+                return lightInter.m.color;
+
+            c += mat.ks * raycast(to, scene, srcIr, depth - 1);
+        }
     
         if (mat.ir > 0 && tRay) {
             float n1 = srcIr, n2 = mat.ir;
@@ -117,7 +128,13 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.
             if(sinT2 < 1.0f || fcmp(sinT2, 1.0f)) {
                 const float cosT = sqrt(1 - sinT2);
                 vec3 T = V * n + (n * cosI - cosT) * N;
-                c += mat.kt * raycast(inter.rayTo(T), scene, mat.ir, depth - 1);
+
+                Intersection lightInter;
+                Ray to = inter.rayTo(T);
+                if (scene.raycast(to, lightInter) && lightInter.m.emissive)
+                    return lightInter.m.color;
+
+                c += mat.kt * raycast(to, scene, mat.ir, depth - 1);
             }
         }
     }
