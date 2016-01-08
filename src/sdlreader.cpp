@@ -5,6 +5,7 @@
 #include <sstream>
 #include <regex>
 #include <string>
+#include <vector>
 #include "quadric.h"
 #include "camera.h"
 #include "object.h"
@@ -87,9 +88,14 @@ inline void readOBJFile(const std::string& url, PathTrace::Mesh& mesh)
 
     // TODO: improve this part of code
     std::ifstream stream;
+    std::vector<std::string> mtlibfiles;
     load(url, stream);
     bool has_normal = true;
+    bool added_face= false;
 
+
+    // TODO: add support to multiple objects files
+    // if it has already added face create a new mesh and add it on array
     while(!stream.eof()) {
         std::string line;
         std::string option;
@@ -102,6 +108,13 @@ inline void readOBJFile(const std::string& url, PathTrace::Mesh& mesh)
             continue;
 
         if (option == "v") {
+
+            // TODO
+            if(added_face) {
+
+                added_face = false;
+            }
+
             vec3 v;
             ss >> v;
             mesh.addVertex(v);
@@ -111,11 +124,18 @@ inline void readOBJFile(const std::string& url, PathTrace::Mesh& mesh)
             ss >> t;
             has_normal &= t.hasNormal();
             mesh.addTriangle(t);
+
+            added_face = true;
         }
         else if (option == "vn") {
             vec3 vn;
             ss >> vn;
             mesh.addNormal(vn);
+        }
+        else if (option == "mtllib") {
+            std::string mtlib;
+            ss >> mtlib;
+            mtlibfiles.push_back(std::string(mtlib));
         }
     }
 

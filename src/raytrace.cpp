@@ -13,7 +13,7 @@ inline static bool fcmp(float a, float b, float epsilon = 0.000001f)
     return (fabs(a - b) < epsilon);
 }
 
-inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.0f, int depth = 5)
+inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.0f, int depth = 2)
 {
     Intersection inter;
     if (!scene.raycast(ray, inter))
@@ -31,10 +31,6 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.
     vec3 N = inter.n;
     vec3 V = normalize(ray.d);
     vec3 R = reflect(V, N);
-
-    bool tRay = false;
-    bool dRay = false;
-    bool sRay = false; 
 
     for (auto& light : scene.getLights()) {
         vec3 l;
@@ -69,56 +65,46 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.
         }
     }
 
-    if (depth > 0) {
-        float ktot = mat.kd + mat.ks + mat.kt;
-        static std::random_device rd;
-        static std::mt19937 gen(rd());
+    if (depth <= 0)
+        return c;
 
-        std::uniform_real_distribution<float> rRay(0, ktot);
-        float r = rRay(gen);
+    float ktot = mat.kd + mat.ks + mat.kt;
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> rRay(0, ktot);
+    float r = rRay(gen);
 
-        if(r < mat.kd)
-            dRay = true;
-        else if (r < mat.kd + mat.ks)
-            sRay = true;
-        else
-            tRay = true;
+    if ((r -= mat.kd) < 0) {
+        std::uniform_real_distribution<float> rAngle(0, 1);
+        const float r1 = rAngle(gen);
+        const float r2 = rAngle(gen);
 
-        if (mat.kd > 0 && dRay) {
-            std::uniform_real_distribution<float> rAngle(0, 1);
-            const float r1 = rAngle(gen);
-            const float r2 = rAngle(gen);
+        const float phi = acos(sqrt(r1));
+        const float theta = 2 * M_PI * r2;
 
-            const float phi = acos(sqrt(r1));
-            const float theta = 2 * M_PI * r2;
+        const float x = sin(phi) * cos(theta);
+        const float y = sin(phi) * sin(theta);
+        const float z = cos(phi);
 
-            const float x = sin(phi) * cos(theta);
-            const float y = sin(phi) * sin(theta);
-            const float z = cos(phi);
+        c += raycast(inter.rayTo(vec3(x,y,z)), scene, srcIr, depth - 1);
+    } else if ((r -= mat.ks) < 0) {
+        c += raycast(inter.rayTo(R), scene, srcIr, depth - 1);
+    } else {
+        float n1 = srcIr, n2 = mat.ir;
 
-            c += mat.kd * raycast(inter.rayTo(vec3(x,y,z)), scene, srcIr, depth - 1);
+        if (fcmp(srcIr, mat.ir)) {
+            n2 = 1.0f;
+            N = -N;
         }
 
-        if (mat.ks > 0 && sRay)
-            c += mat.ks * raycast(inter.rayTo(R), scene, srcIr, depth - 1);
-    
-        if (mat.ir > 0 && tRay) {
-            float n1 = srcIr, n2 = mat.ir;
+        const float n = n1 / n2;
+        const float cosI = -dot(N, V);
+        const float sinT2 = n * n * (1.0 - cosI * cosI);
 
-            if(fcmp(srcIr, mat.ir)) {
-                n2 = 1.0f;
-                N = -N;
-            }
-
-            const float n = n1 / n2;
-            const float cosI = -dot(N, V);
-            const float sinT2 = n * n * (1.0 - cosI * cosI);
-            
-            if(sinT2 < 1.0f || fcmp(sinT2, 1.0f)) {
-                const float cosT = sqrt(1 - sinT2);
-                vec3 T = V * n + (n * cosI - cosT) * N;
-                c += mat.kt * raycast(inter.rayTo(T), scene, mat.ir, depth - 1);
-            }
+        if(sinT2 < 1.0f || fcmp(sinT2, 1.0f)) {
+            const float cosT = sqrt(1 - sinT2);
+            vec3 T = V * n + (n * cosI - cosT) * N;
+            c += raycast(inter.rayTo(T), scene, mat.ir, depth - 1);
         }
     }
 
