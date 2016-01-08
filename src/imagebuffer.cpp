@@ -26,7 +26,7 @@ void ImageBuffer::clear(const color& c)
 
 void ImageBuffer::setTonemapping(float tm)
 {
-    tonemapping_multiplier = 255.0f / tm;
+    tonemapping_multiplier = float(ImageBuffer::CHANNEL_MAX) / tm;
 }
 
 static std::ostream& operator<<(std::ostream& stream, const color& color)
@@ -37,11 +37,11 @@ static std::ostream& operator<<(std::ostream& stream, const color& color)
     return stream;
 }
 
-static color limit(glm::vec3 c)
+color limit(glm::vec3 c)
 {
-    float r = std::min(c[0], 255.0f);
-    float g = std::min(c[1], 255.0f);
-    float b = std::min(c[2], 255.0f);
+    float r = std::min(c[0], float(ImageBuffer::CHANNEL_MAX));
+    float g = std::min(c[1], float(ImageBuffer::CHANNEL_MAX));
+    float b = std::min(c[2], float(ImageBuffer::CHANNEL_MAX));
 
     return {r, g, b};
 }
@@ -50,7 +50,7 @@ std::ostream& operator<<(std::ostream& stream, const ImageBuffer &image)
 {
     stream << "P3" << std::endl; // P3 is the magic number
     stream << image.w << " "<< image.h << std::endl;
-    stream << 255 << std::endl; // XXX: get this automaticaly
+    stream <<  ImageBuffer::CHANNEL_MAX << std::endl; // XXX: get this automaticaly
     for (const auto& color : image.buffer) {
         stream << limit(color * image.tonemapping_multiplier) << " ";
     }

@@ -11,7 +11,8 @@ class ImageBuffer
 {
 private:
     std::vector<color> buffer;
-    float tonemapping_multiplier = 255.0f;
+    static constexpr int CHANNEL_MAX = 255;
+    float tonemapping_multiplier = float(CHANNEL_MAX);
     std::size_t w;
     std::size_t h;
 
@@ -26,6 +27,7 @@ public:
     void clear(const color& c);
 
     friend std::ostream& operator<<(std::ostream& stream, const ImageBuffer &);
+    friend color limit(glm::vec3 c);
 };
 
 }
