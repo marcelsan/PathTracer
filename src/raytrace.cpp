@@ -45,39 +45,37 @@ inline static color phongShading(const Intersection& inter, const Scene& scene, 
     return black;
 }
 
-inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.0f, int depth = 2)
+inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.0f, int depth = 5)
 {
     Intersection inter;
     if (!scene.raycast(ray, inter))
         return scene.background();
 
     Material mat = inter.m;
-    color c = mat.ka * mat.color;
 
-    if (mat.emissive) {
-        c += mat.color;
-        return c;
-    }
+    if (mat.emissive)
+        return mat.color;
 
-    vec3 L;
     vec3 N = inter.n;
     vec3 V = normalize(ray.d);
     vec3 R = reflect(V, N);
 
-    for (auto& light : scene.getLights()) {
+    color c = black;
+    for (auto& light : scene.getLights())
         c += phongShading(inter, scene, light.get(), N, V, R);
-    }
 
     if (depth <= 0)
         return c;
 
-    float ktot = mat.kd + mat.ks + mat.kt;
+    float ktot = mat.kd + mat.ks + mat.kt + mat.ka;
     static std::random_device rd;
     static std::mt19937 gen(rd());
     std::uniform_real_distribution<float> rRay(0, ktot);
     float r = rRay(gen);
 
-    if ((r -= mat.kd) < 0) {
+    if ((r -= mat.ka) < 0) {
+        c += mat.color;
+    } else if ((r -= mat.kd) < 0) {
         std::uniform_real_distribution<float> rAngle(0, 1);
         const float r1 = rAngle(gen);
         const float r2 = rAngle(gen);
