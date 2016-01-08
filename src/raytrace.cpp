@@ -13,6 +13,38 @@ inline static bool fcmp(float a, float b, float epsilon = 0.000001f)
     return (fabs(a - b) < epsilon);
 }
 
+inline static color phongShading(const Intersection& inter, const Scene& scene, const Light* light, const vec3& N, const vec3& V, const vec3& R)
+{
+    Material mat = inter.m;
+    vec3 l;
+    color lightColor = light->emissionColor();
+
+    if(!light->directional) {
+        l = light->samplePosition() - inter.p;
+    } else {
+        l = light->direction();
+    }
+
+    const vec3 L = normalize(l);
+
+    Intersection shadow;
+    if (scene.raycast(inter.rayTo(L), shadow, length(l) - 0.00001f)) {
+        if (shadow.o != light->object())
+            return black;
+    }
+
+    float NL = dot(N, L);
+    float LR = dot(L, R);
+
+    if (NL > 0)
+        return NL * mat.kd * lightColor * mat.color * light->ip;
+
+    if (LR > 0)
+        return mat.ks * float(pow(LR, mat.n)) * lightColor * light->ip;
+
+    return black;
+}
+
 inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.0f, int depth = 2)
 {
     Intersection inter;
@@ -33,36 +65,7 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.
     vec3 R = reflect(V, N);
 
     for (auto& light : scene.getLights()) {
-        vec3 l;
-        color lightColor = light->emissionColor();
-
-        if(!light->directional) {
-            l = light->samplePosition() - inter.p;
-        } else {
-            l = light->direction();
-        }
-
-        L = normalize(l);
-
-        Intersection shadow;
-        bool shadowed = true;
-        if (scene.raycast(inter.rayTo(L), shadow, length(l) - 0.00001f)) {
-            if (shadow.o != light->object())
-                shadowed = true; //distance(inter.p, shadow.p) < length(l);
-        } else {
-            shadowed = false;
-        }
-
-        if (!shadowed) {
-            float NL = dot(N, L);
-            float LR = dot(L, R);
-
-            if (NL > 0)
-                c += NL * mat.kd * lightColor * mat.color * light->ip;
-
-            if (LR > 0)
-                c += mat.ks * float(pow(LR, mat.n)) * lightColor * light->ip;
-        }
+        c += phongShading(inter, scene, light.get(), N, V, R);
     }
 
     if (depth <= 0)
