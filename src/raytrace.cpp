@@ -33,16 +33,17 @@ inline static color phongShading(const Intersection& inter, const Scene& scene, 
             return black;
     }
 
+    color c = black;
     float NL = dot(N, L);
     float LR = dot(L, R);
 
     if (NL > 0)
-        return NL * mat.kd * lightColor * mat.color * light->ip;
+        c += NL * mat.kd * lightColor * mat.color * light->ip;
 
     if (LR > 0)
-        return mat.ks * float(pow(LR, mat.n)) * lightColor * light->ip;
+        c += mat.ks * float(pow(LR, mat.n)) * lightColor * light->ip;
 
-    return black;
+    return c;
 }
 
 inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.0f, int depth = 5)
