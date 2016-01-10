@@ -60,22 +60,19 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.
     vec3 V = normalize(ray.d);
     vec3 R = reflect(V, N);
 
-    color c = black;
+    color c = mat.ka * mat.color * scene.ambient();
     for (auto& light : scene.getLights())
         c += phongShading(inter, scene, light.get(), N, V, R);
 
     if (depth <= 0)
         return c;
 
-    float ktot = mat.kd + mat.ks + mat.kt + mat.ka;
     static std::random_device rd;
     static std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> rRay(0, ktot);
+    std::uniform_real_distribution<float> rRay(0, mat.ktot());
     float r = rRay(gen);
 
-    if ((r -= mat.ka) < 0) {
-        c += mat.color;
-    } else if ((r -= mat.kd) < 0) {
+    if ((r -= mat.kd) < 0) {
         std::uniform_real_distribution<float> rAngle(0, 1);
         const float r1 = rAngle(gen);
         const float r2 = rAngle(gen);
@@ -102,7 +99,7 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.
         const float cosI = -dot(N, V);
         const float sinT2 = n * n * (1.0 - cosI * cosI);
 
-        if(sinT2 < 1.0f || fcmp(sinT2, 1.0f)) {
+        if (sinT2 < 1.0f || fcmp(sinT2, 1.0f)) {
             const float cosT = sqrt(1 - sinT2);
             vec3 T = V * n + (n * cosI - cosT) * N;
             c += raycast(inter.rayTo(T), scene, mat.ir, depth - 1);
