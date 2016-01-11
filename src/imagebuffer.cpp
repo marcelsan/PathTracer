@@ -29,11 +29,14 @@ void ImageBuffer::setTonemapping(float tm)
     tonemapping_multiplier = float(ImageBuffer::CHANNEL_MAX) / tm;
 }
 
+inline double clamp(double x){ return x<0 ? 0 : x>1 ? 1 : x; } 
+inline int toInt(double x){ return int(pow(clamp(x),1/2.2)*255+.5); }
+
 static std::ostream& operator<<(std::ostream& stream, const color& color)
 {
-    stream << int(round(color.r)) << " ";
-    stream << int(round(color.g)) << " ";
-    stream << int(round(color.b)) << " ";
+    stream << toInt(color.r) << " ";
+    stream << toInt(color.g) << " ";
+    stream << toInt(color.b) << " ";
     return stream;
 }
 
@@ -52,7 +55,7 @@ std::ostream& operator<<(std::ostream& stream, const ImageBuffer &image)
     stream << image.w << " "<< image.h << std::endl;
     stream <<  ImageBuffer::CHANNEL_MAX << std::endl; // XXX: get this automaticaly
     for (const auto& color : image.buffer) {
-        stream << limit(color * image.tonemapping_multiplier) << " ";
+        stream << color << " ";
     }
     return stream;
 }
