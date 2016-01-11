@@ -61,7 +61,7 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.
     vec3 V = normalize(ray.d);
     vec3 R = reflect(V, N);
 
-    color c = mat.ka * mat.color * scene.ambient();
+    color c = black;
     for (auto& light : scene.getLights())
         c += phongShading(inter, scene, light.get(), N, V, R);
 
@@ -75,19 +75,18 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.
 
     if ((r -= mat.kd) < 0) {
         std::uniform_real_distribution<float> rAngle(0, 1);
-        const float r1 = rAngle(gen);
-        const float r2 = rAngle(gen);
+        float  r1= 2 * M_PI * rAngle(gen); 
+        float  r2 = rAngle(gen);
+        float  r2s = sqrt(r2); 
 
-        const float phi = acos(sqrt(r1));
-        const float theta = 2 * M_PI * r2;
+        vec3 w = N;
+        vec3 u = normalize(cross(fabs(w.x) > 0.1 ? vec3(0,1,0):vec3(1,0,0), w));
+        vec3 v = cross(w, u); 
+        vec3 d = normalize(cos(r1)*r2s*u + sin(r1)*r2s*v + sqrt(1-r2)*w);
 
-        const float x = sin(phi) * cos(theta);
-        const float y = sin(phi) * sin(theta);
-        const float z = cos(phi);
-
-        c += raycast(inter.rayTo(vec3(x,y,z)), scene, srcIr, depth - 1);
+        c += mat.color * mat.kd * raycast(inter.rayTo(d), scene, srcIr, depth - 1);
     } else if ((r -= mat.ks) < 0) {
-        c += raycast(inter.rayTo(R), scene, srcIr, depth - 1);
+        c += mat.color * raycast(inter.rayTo(R), scene, srcIr, depth - 1);
     } else {
         float n1 = srcIr, n2 = mat.ir;
 
@@ -103,7 +102,7 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.
         if (sinT2 < 1.0f || fcmp(sinT2, 1.0f)) {
             const float cosT = sqrt(1 - sinT2);
             vec3 T = V * n + (n * cosI - cosT) * N;
-            c += raycast(inter.rayTo(T), scene, mat.ir, depth - 1);
+            c += mat.color * raycast(inter.rayTo(T), scene, mat.ir, depth - 1);
         }
     }
 
@@ -128,6 +127,7 @@ void pathtrace(ImageBuffer &buffer, const Scene& scene, const Camera& cam)
     static std::mt19937 gen(rd());
     double w = buffer.width();
     double h = buffer.height();
+    std::cerr << "Working on pathtrace..." << std::endl;
     for (unsigned i = 0; i < h; i++) {
         for (unsigned j = 0; j < w; j++) {
             color c = black;
@@ -135,7 +135,7 @@ void pathtrace(ImageBuffer &buffer, const Scene& scene, const Camera& cam)
             std::uniform_real_distribution<float> hDis(j / w, (j + 1) / w);
             for (unsigned n = 0; n < cam.nPaths(); n++) {
                 Ray ray = cam.ray(vDis(gen), hDis(gen));
-                c += raycast(ray, scene);
+                c += raycast(ray, scene, 1, 3);
             }
             buffer(i, j) = c / float(cam.nPaths());
         }
