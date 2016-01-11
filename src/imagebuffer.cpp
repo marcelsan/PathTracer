@@ -26,7 +26,7 @@ void ImageBuffer::clear(const color& c)
 
 void ImageBuffer::setTonemapping(float tm)
 {
-    tonemapping_multiplier = tm;
+    tonemapping_multiplier = 255.0f / tm;
 }
 
 static std::ostream& operator<<(std::ostream& stream, const color& color)
@@ -52,8 +52,9 @@ std::ostream& operator<<(std::ostream& stream, const ImageBuffer &image)
     stream << image.w << " "<< image.h << std::endl;
     stream << 255 << std::endl; // XXX: get this automaticaly
     for (const auto& color : image.buffer) {
-        stream << limit(255.0f * color) << " ";
+        //stream << limit(255.0f * color) << " ";
         //stream << 255.0f *color/(color + image.tonemapping_multiplier) << " ";
+        stream << limit(color * image.tonemapping_multiplier) << " ";
     }
     return stream;
 }
