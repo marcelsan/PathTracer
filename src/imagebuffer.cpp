@@ -51,16 +51,7 @@ std::ostream& operator<<(std::ostream& stream, const ImageBuffer &image)
     stream << image.w << " "<< image.h << std::endl;
     stream <<  ImageBuffer::CHANNEL_MAX << std::endl; // XXX: get this automaticaly
     for (const auto& color : image.buffer) {
-<<<<<<< HEAD
-        //stream << limit(255.0f * color) << " ";
-        //stream << 255.0f *color/(color + image.tonemapping_multiplier) << " ";
-        stream << limit(color * image.tonemapping_multiplier) << " ";
-||||||| merged common ancestors
-        stream << limit(255.0f * color) << " ";
-        //stream << 255.0f *color/(color + image.tonemapping_multiplier) << " ";
-=======
         stream << color << " ";
->>>>>>> new_branch_name
     }
     return stream;
 }
