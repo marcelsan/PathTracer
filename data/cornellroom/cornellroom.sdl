@@ -6,14 +6,14 @@
 # do Vinicius 6/12/2005
 
 eye 0.0 0.0 5.7
-size 300 300
+size 100 100
 ortho -1 -1 1 1
 background 0.0 0.0 0.0
 ambient 0.5
 
 # Luz branca retangulo no centro do teto
 light luzcornell.obj 1.0 1.0 1.0 1.0
-# light 1.0 0.0 1.0 1.0
+#light 1.0 0.0 1.0 1.0
 
 npaths 100
 tonemapping 1.0

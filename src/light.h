@@ -54,7 +54,7 @@ public:
 
     vec3 samplePosition() const { return {}; }
     vec3 direction() const { return dir; }
-    color emissionColor() const override { return {ip * 1.0f, ip * 1.0f, ip * 1.0f}; }
+    color emissionColor() const override { return {1.0f, 1.0f, 1.0f}; }
 };
 
 }

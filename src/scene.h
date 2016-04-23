@@ -26,6 +26,7 @@ public:
 
     void addLight(std::unique_ptr<Light> l);
     void setIa(float ia) { Ia = ia; }
+    float ambient() const { return Ia; }
     const std::vector<std::unique_ptr<Light>>& getLights() const;
     void add(std::unique_ptr<Object> o);
     bool raycast(const Ray& ray, Intersection& inter, float limit = std::numeric_limits<float>::max()) const;

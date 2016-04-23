@@ -16,6 +16,7 @@ set(pathtracer_SRCS
     raytrace.cpp
     light.cpp
     main.cpp
+    util.cpp
 )
 
 add_executable(pathtracer ${pathtracer_SRCS})
