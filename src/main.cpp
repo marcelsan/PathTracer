@@ -29,7 +29,7 @@ int main(int argc, char const *argv[])
     std::string path(argv[1]);
     SDLReader::readSDLFile(path, ib, cam, s);
 
-    pathtrace(ib, s, cam);
+    raytrace(ib, s, cam);
 
     std::ofstream ofs (argv[2], std::ofstream::out);
     ofs << ib;

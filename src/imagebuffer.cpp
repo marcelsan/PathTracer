@@ -1,6 +1,5 @@
 #include "imagebuffer.h"
-
-#include <cmath>
+#include "util.h"
 
 namespace PathTrace {
 
@@ -28,9 +27,6 @@ void ImageBuffer::setTonemapping(float tm)
 {
     tonemapping_multiplier = float(ImageBuffer::CHANNEL_MAX) / tm;
 }
-
-inline double clamp(double x){ return x<0 ? 0 : x>1 ? 1 : x; } 
-inline int toInt(double x){ return int(pow(clamp(x),1/2.2)*255+.5); }
 
 static std::ostream& operator<<(std::ostream& stream, const color& color)
 {
