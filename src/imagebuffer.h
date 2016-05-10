@@ -12,7 +12,6 @@ class ImageBuffer
 private:
     std::vector<color> buffer;
     static constexpr int CHANNEL_MAX = 255;
-    float tonemapping_multiplier = float(CHANNEL_MAX);
     std::size_t w;
     std::size_t h;
 
@@ -21,7 +20,6 @@ public:
     std::size_t width() const { return w; }
     std::size_t height() const { return h; }
     void setSize(std::size_t width, std::size_t height);
-    void setTonemapping(float tonemap);
     color& operator()(std::size_t i, std::size_t j) { return buffer[i * w + j]; };
     const color& operator()(std::size_t i, std::size_t j) const { return buffer[i * w + j]; };
     void clear(const color& c);

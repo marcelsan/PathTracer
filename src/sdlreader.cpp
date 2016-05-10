@@ -243,13 +243,6 @@ inline static void readSize(std::istream& stream, ImageBuffer& image)
     image.setSize(w, h);
 }
 
-inline static void readTonemapping(std::istream& stream, ImageBuffer& image)
-{
-    float tonemapping;
-    stream >> tonemapping;
-    image.setTonemapping(tonemapping);
-}
-
 void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, PathTrace::Scene& s)
 {
     std::ifstream stream;
@@ -289,9 +282,6 @@ void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, Pa
         }
         else if (option == "size") {
             readSize(ss, image);
-        }
-        else if (option == "tonemapping") {
-            readTonemapping(ss, image);
         }
         else if (option == "ambient") {
             readAmbient(ss, s);

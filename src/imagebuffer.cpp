@@ -23,11 +23,6 @@ void ImageBuffer::clear(const color& c)
         bc = c;
 }
 
-void ImageBuffer::setTonemapping(float tm)
-{
-    tonemapping_multiplier = float(ImageBuffer::CHANNEL_MAX) / tm;
-}
-
 static std::ostream& operator<<(std::ostream& stream, const color& color)
 {
     stream << toInt(color.r) << " ";
