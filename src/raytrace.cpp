@@ -165,26 +165,6 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.
     return c;
 }
 
-void raytrace(ImageBuffer &buffer, const Scene& scene, const Camera& cam)
-{
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    double w = buffer.width();
-    double h = buffer.height();
-    for (size_t i = 0; i < h; i++) {
-        for (size_t j = 0; j < w; j++) {
-            color c = black;
-            std::uniform_real_distribution<float> vDis(i / h, (i + 1) / h);
-            std::uniform_real_distribution<float> hDis(j / w, (j + 1) / w);
-            for (unsigned n = 0; n < cam.nPaths(); n++) {
-                Ray ray = cam.ray(vDis(gen), hDis(gen));
-                c += raytracing(ray, scene, 1 , 15);
-            }
-            buffer(i, j) = c / float(cam.nPaths());
-        }
-    }
-}
-
 void pathtrace(ImageBuffer &buffer, const Scene& scene, const Camera& cam)
 {
     static std::random_device rd;
