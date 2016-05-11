@@ -1,9 +1,13 @@
 #include "raytrace.h"
+
 #include <glm/glm.hpp>
 #include <cmath>
 #include <random>
+
+#include "feature.h"
 #include "ray.h"
 #include "util.h"
+#include "npywriter.h"
 
 using namespace glm;
 
@@ -22,85 +26,34 @@ inline static color phongShading(const Material& mat, const Light& light, const 
     return c;
 }
 
-inline static color raytracing(const Ray& ray, const Scene& scene, float srcIr = 1.0f, int depth = 5)
+inline static Feature raycast(const Ray& ray, const Scene& scene, float srcIr = 1.0f, int depth = 5)
 {
+    Feature feat;
+
     Intersection inter;
-    if (!scene.raycast(ray, inter))
-        return scene.background();
-
-    Material mat = inter.m;
-    color c = mat.ka * mat.color;
-
-    if (mat.emissive)
-        return mat.color;
-
-    vec3 L;
-    vec3 N = inter.n;
-    vec3 V = normalize(ray.d);
-    vec3 R = reflect(V, N);
-
-    if (depth <= 0)
-        scene.background();
-
-    for (auto& light : scene.getLights()) {
-        vec3 l;
-        Intersection shadow;
-        bool shadowed = false;
-
-        if(!light->directional) {
-            l = light->samplePosition() - inter.p;
-        } else {
-            l = light->direction();
-        }
-
-        L = normalize(l);
-
-        if (scene.raycast(inter.rayTo(L), shadow, length(l) - 0.00001f))
-            if (shadow.o != light->object())
-                shadowed = true;
-
-        if (!shadowed)
-            c += phongShading(mat, *light, L, N, V, R);
+    if (!scene.raycast(ray, inter)) {
+        feat.col = scene.background();
+        feat.positive = true;
+        return feat;
     }
 
-    c += mat.ks * raytracing(inter.rayTo(R), scene, srcIr, depth - 1);
+    feat.normal = inter.n;
+    Material mat = feat.mat = inter.m;
 
-    if (mat.ir > 0) {
-        float n1 = srcIr, n2 = mat.ir;
-        if(fcmp(srcIr, mat.ir))
-            n2 = 1.0f;
-
-        const float n = n1 / n2;
-        const float cosI = -dot(N, V);
-        const float sinT2 = n * n * (1.0 - pow(cosI, 2));
-        
-        if(sinT2 < 1.0f || fcmp(sinT2, 1.0f)) {
-            const float cosT = sqrt(1 - sinT2);
-            vec3 T = V * n + (n * cosI - cosT) * N;
-            c += mat.kt * raytracing(inter.rayTo(T), scene, mat.ir, depth - 1);
-        }
+    if (mat.emissive) {
+        feat.col = mat.color;
+        return feat;
     }
-
-    return c;
-}
-
-inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.0f, int depth = 5)
-{
-    Intersection inter;
-    if (!scene.raycast(ray, inter))
-        return scene.background();
-
-    Material mat = inter.m;
-
-    if (mat.emissive)
-        return mat.color;
 
     vec3 N = inter.n;
     vec3 V = normalize(ray.d);
     vec3 R = reflect(V, N);
 
-    if (depth <= 0)
-        scene.background();
+    if (depth <= 0) {
+        feat.col = scene.background();
+        feat.positive = -1.0f;
+        return feat;
+    }
 
     color c = black;
     for (auto& light : scene.getLights()) {
@@ -140,9 +93,9 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.
         vec3 v = cross(w, u); 
         vec3 d = normalize(cos(r1)*r2s*u + sin(r1)*r2s*v + sqrt(1-r2)*w);
 
-        c += mat.color * mat.kd * raycast(inter.rayTo(d), scene, srcIr, depth - 1);
+        c += mat.color * mat.kd * raycast(inter.rayTo(d), scene, srcIr, depth - 1).col;
     } else if ((r -= mat.ks) < 0) {
-        c += mat.color * mat.ks * raycast(inter.rayTo(R), scene, srcIr, depth - 1);
+        c += mat.color * mat.ks * raycast(inter.rayTo(R), scene, srcIr, depth - 1).col;
     } else {
         float n1 = srcIr, n2 = mat.ir;
 
@@ -158,30 +111,32 @@ inline static color raycast(const Ray& ray, const Scene& scene, float srcIr = 1.
         if (sinT2 < 1.0f || fcmp(sinT2, 1.0f)) {
             const float cosT = sqrt(1 - sinT2);
             vec3 T = V * n + (n * cosI - cosT) * N;
-            c += mat.color * mat.kt * raycast(inter.rayTo(T), scene, mat.ir, depth - 1);
+            c += mat.color * mat.kt * raycast(inter.rayTo(T), scene, mat.ir, depth - 1).col;
         }
     }
 
-    return c;
+    feat.col = c;
+    return feat;
 }
 
-void pathtrace(ImageBuffer &buffer, const Scene& scene, const Camera& cam)
+void pathtrace(std::string filename, const Size& size, const Scene& scene, const Camera& cam)
 {
     static std::random_device rd;
     static std::mt19937 gen(rd());
-    double w = buffer.width();
-    double h = buffer.height();
+    double w = size.width;
+    double h = size.height;
     std::cerr << "Working on pathtrace..." << std::endl;
-    for (unsigned i = 0; i < h; i++) {
-        for (unsigned j = 0; j < w; j++) {
-            color c = black;
-            std::uniform_real_distribution<float> vDis(i / h, (i + 1) / h);
-            std::uniform_real_distribution<float> hDis(j / w, (j + 1) / w);
-            for (unsigned n = 0; n < cam.nPaths(); n++) {
+
+    NPYWriter writer(filename);
+    writer.writeHeader({cam.nPaths(), size.height, size.width, Feature::feature_size});
+    for (unsigned n = 0; n < cam.nPaths(); n++) {
+        for (unsigned i = 0; i < h; i++) {
+            for (unsigned j = 0; j < w; j++) {
+                std::uniform_real_distribution<float> vDis(i / h, (i + 1) / h);
+                std::uniform_real_distribution<float> hDis(j / w, (j + 1) / w);
                 Ray ray = cam.ray(vDis(gen), hDis(gen));
-                c += raycast(ray, scene, 1 , 15);
+                writer.write(raycast(ray, scene, 1 , 15).data());
             }
-            buffer(i, j) = c / float(cam.nPaths());
         }
     }
 }

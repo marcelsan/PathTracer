@@ -6,9 +6,9 @@ set(pathtracer_SRCS
     quadric.cpp
     box.cpp
     camera.cpp
-    imagebuffer.cpp
     intersection.cpp
     mesh.cpp
+    npywriter.cpp
     scene.cpp
     material.cpp
     sdlreader.cpp
