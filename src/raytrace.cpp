@@ -29,14 +29,14 @@ inline static color phongShading(const Material& mat, const Light& light, const 
 inline static Feature raycast(const Ray& ray, const Scene& scene, float srcIr = 1.0f, int depth = 5)
 {
     Feature feat;
+    feat.dist = std::numeric_limits<float>::max();
 
     Intersection inter;
-    if (!scene.raycast(ray, inter)) {
+    if (!scene.raycast(ray, inter, feat.dist)) {
         feat.col = scene.background();
         feat.positive = true;
         return feat;
     }
-
     feat.normal = inter.n;
     Material mat = feat.mat = inter.m;
 
@@ -68,7 +68,8 @@ inline static Feature raycast(const Ray& ray, const Scene& scene, float srcIr = 
 
         const vec3 L = normalize(l);
 
-        if (scene.raycast(inter.rayTo(L), shadow, length(l) - 0.00001f)) {
+        feat.sec_dist = length(l) - 0.00001f;
+        if (scene.raycast(inter.rayTo(L), shadow, feat.sec_dist)) {
             if (shadow.o != light->object())
                 shadowed = true;
         }

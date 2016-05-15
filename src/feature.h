@@ -13,9 +13,10 @@ struct Feature {
     color col;
     glm::vec3 normal;
     float dist;
+    float sec_dist;
     bool positive = false;
 
-    static const std::size_t feature_size = 18;
+    static const std::size_t feature_size = 19;
 
     std::vector<float> data() const {
         return {
@@ -26,6 +27,7 @@ struct Feature {
             normal.y,
             normal.z,
             dist,
+            sec_dist,
             mat.color.r,
             mat.color.g,
             mat.color.b,
