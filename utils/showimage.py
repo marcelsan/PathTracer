@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 
 a = np.load(sys.argv[1]) # .npy file
 n = int(sys.argv[2]) if len(sys.argv) >= 3 else -1
+axes = plt.axes()
+axes.xaxis.set_visible(False)
+axes.yaxis.set_visible(False)
 
 # Color
 img = np.average(a[:n,:,:,:3], axis=0)
