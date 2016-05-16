@@ -108,7 +108,6 @@ inline void readOBJFile(const std::string& url, PathTrace::Mesh& mesh)
             continue;
 
         if (option == "v") {
-
             // TODO
             if(added_face) {
 
@@ -236,11 +235,12 @@ inline static void readMesh(const std::string& path, std::istream& stream, Scene
     s.add(std::move(mesh));
 }
 
-inline static void readSize(std::istream& stream, ImageBuffer& image)
+inline static void readSize(std::istream& stream, ImageBuffer& image, Camera& cam)
 {
     size_t w, h;
     stream >> w >> h;
     image.setSize(w, h);
+    cam.setAspect(float(w)/float(h));
 }
 
 inline static void readTonemapping(std::istream& stream, ImageBuffer& image)
@@ -248,6 +248,13 @@ inline static void readTonemapping(std::istream& stream, ImageBuffer& image)
     float tonemapping;
     stream >> tonemapping;
     image.setTonemapping(tonemapping);
+}
+
+inline static void readCamera(std::istream& stream, Camera& cam)
+{
+    vec3 rot;
+    stream >> rot;
+    cam.setRot(rot);
 }
 
 void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, PathTrace::Scene& s)
@@ -288,7 +295,7 @@ void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, Pa
             readMesh(path, ss, s);
         }
         else if (option == "size") {
-            readSize(ss, image);
+            readSize(ss, image, cam);
         }
         else if (option == "tonemapping") {
             readTonemapping(ss, image);
@@ -298,6 +305,9 @@ void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, Pa
         }
         else if (option == "light") {
             readLight(path, ss, s);
+        }
+        else if (option == "camera") {
+            readCamera(ss, cam);
         }
         else if (option != "") {
             std::cerr << "[WARNING] Ignoring option " << option << std::endl;
