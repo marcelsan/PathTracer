@@ -22,7 +22,7 @@ Ray Camera::ray(float i, float j) const
     glm::vec4 rayPWorld = glm::inverse(V) * glm::dvec4(dest.x, dest.y, -1.0, 1.0);
     glm::vec4 rayOriginWorld = glm::inverse(V) * glm::dvec4(0.0f, 0.0f, 0.0f, 1.0f);
 
-    return {glm::vec3(rayOriginWorld), 
+    return {eye, 
             glm::normalize(glm::vec3(rayPWorld) - glm::vec3(rayOriginWorld))};
 }
 
