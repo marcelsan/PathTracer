@@ -63,12 +63,17 @@ inline static color raytracing(const Ray& ray, const Scene& scene, float srcIr =
             c += phongShading(mat, *light, L, N, V, R);
     }
 
-    c += mat.ks * raytracing(inter.rayTo(R), scene, srcIr, depth - 1);
+    float F = 1.0f;
+    color ct;
+    color cr = mat.ks * raytracing(inter.rayTo(R), scene, srcIr, depth - 1); 
 
     if (mat.ir > 0) {
         float n1 = srcIr, n2 = mat.ir;
         if(fcmp(srcIr, mat.ir))
             n2 = 1.0f;
+
+        const float F0 = pow((n2 - n1)/(n2 + n1), 2);
+        F = F0 + (1 - F0) * (1 - dot(N, R));
 
         const float n = n1 / n2;
         const float cosI = -dot(N, V);
@@ -77,9 +82,11 @@ inline static color raytracing(const Ray& ray, const Scene& scene, float srcIr =
         if(sinT2 < 1.0f || fcmp(sinT2, 1.0f)) {
             const float cosT = sqrt(1 - sinT2);
             vec3 T = V * n + (n * cosI - cosT) * N;
-            c += mat.kt * raytracing(inter.rayTo(T), scene, mat.ir, depth - 1);
+            ct = mat.kt * raytracing(inter.rayTo(T), scene, mat.ir, depth - 1);
         }
     }
+
+    c += F * cr + (1 - F) * ct;
 
     return c;
 }
@@ -178,7 +185,7 @@ void raytrace(ImageBuffer &buffer, const Scene& scene, const Camera& cam)
             std::uniform_real_distribution<float> hDis(j / w, (j + 1) / w);
             for (unsigned n = 0; n < cam.nPaths(); n++) {
                 Ray ray = cam.ray(vDis(gen), hDis(gen));
-                c += raytracing(ray, scene, 1 , 15);
+                c += raytracing(ray, scene);
             }
             buffer(i, j) = c / float(cam.nPaths());
         }
