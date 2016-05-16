@@ -2,7 +2,7 @@
 #define CAMERA_H
 
 #include <glm/glm.hpp>
-
+#include <iostream>
 #include "ray.h"
 
 using namespace glm;
@@ -12,7 +12,9 @@ namespace PathTrace {
 struct Camera
 {
 public:
+    void setAspect(float a);
     void setEye(const vec3& eye);
+    void setRot(const vec3& rot);
     void setOrtho(const vec2& min, const vec2& max);
     void setNPaths(unsigned n);
     unsigned nPaths() const;
@@ -20,9 +22,12 @@ public:
 
 private:
     vec3 eye;
+    vec3 rot;
     vec2 clipMin = {-1.0, -1.0};
     vec2 clipMax = { 1.0,  1.0};
-    float focusDistance = 1.0;
+
+    float fov = M_PI/3.0;
+    float aspect;
     unsigned npaths;
 };
 
