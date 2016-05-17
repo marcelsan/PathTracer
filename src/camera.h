@@ -26,7 +26,7 @@ private:
     vec2 clipMin = {-1.0, -1.0};
     vec2 clipMax = { 1.0,  1.0};
 
-    float fov = M_PI/8.0;
+    float fov = M_PI/16.0;
     float aspect;
     unsigned npaths;
 };
