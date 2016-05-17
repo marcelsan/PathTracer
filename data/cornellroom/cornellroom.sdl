@@ -10,9 +10,9 @@ ortho -1 -1 1 1
 background 0.0 0.0 0.0
 ambient 0.5
 
-eye 0.0 0.0 -1.0
+eye 0.0 0.0 0.0
 # [rotx, roty, rotz]
-camera 0.0 0.0 0.0
+camera 0.0 45 0.0
 
 # Luz branca retangulo no centro do teto
 light luzcornell.obj 1.0 1.0 1.0 1.0
