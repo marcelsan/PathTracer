@@ -11,5 +11,5 @@ int toInt(const double x);
 void printMatrix4(const glm::dmat4& M, const char* t);
 void printVec4(const glm::vec4& v, const char* title);
 
-glm::dmat4 LookAt(const glm::vec3 &pos, const glm::vec3 &look, const glm::vec3 &up);
+glm::dmat4 LookAt(const glm::vec3 &eye, const glm::vec3 &center, const glm::vec3 &up);
 #endif

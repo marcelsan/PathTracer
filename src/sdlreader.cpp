@@ -93,9 +93,6 @@ inline void readOBJFile(const std::string& url, PathTrace::Mesh& mesh)
     bool has_normal = true;
     bool added_face= false;
 
-
-    // TODO: add support to multiple objects files
-    // if it has already added face create a new mesh and add it on array
     while(!stream.eof()) {
         std::string line;
         std::string option;
@@ -203,13 +200,6 @@ inline static void readQuadric(std::istream& stream, Scene& s)
     s.add(std::unique_ptr<Object>(new Quadric(a,b,c,d,e,f,g,h,j,k,mat)));
 }
 
-inline static void readEye(std::istream& stream, Camera& cam)
-{
-    vec3 eye;
-    stream >> eye;
-    cam.setEye(eye);
-}
-
 inline static void readNPaths(std::istream& stream, Camera& cam)
 {
     unsigned npaths;
@@ -252,9 +242,9 @@ inline static void readTonemapping(std::istream& stream, ImageBuffer& image)
 
 inline static void readCamera(std::istream& stream, Camera& cam)
 {
-    vec3 rot;
-    stream >> rot;
-    cam.setRot(rot);
+    vec3 e, c, u;
+    stream >> e >> c >> u;
+    cam.lookAt(e, c, u);
 }
 
 void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, PathTrace::Scene& s)
@@ -282,9 +272,6 @@ void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, Pa
         else if (option == "objectquadric") {
             readQuadric(ss, s);
         }
-        else if (option ==  "eye") {
-            readEye(ss, cam);
-        }
         else if (option ==  "npaths") {
             readNPaths(ss, cam);
         }
@@ -303,11 +290,11 @@ void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, Pa
         else if (option == "ambient") {
             readAmbient(ss, s);
         }
-        else if (option == "light") {
-            readLight(path, ss, s);
-        }
         else if (option == "camera") {
             readCamera(ss, cam);
+        }
+        else if (option == "light") {
+            readLight(path, ss, s);
         }
         else if (option != "") {
             std::cerr << "[WARNING] Ignoring option " << option << std::endl;

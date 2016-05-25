@@ -20,16 +20,16 @@ void printVec4(const glm::vec4& v, const char* title)
     printf("\n");
 }
 
-glm::dmat4 LookAt(const glm::vec3& pos, const glm::vec3& look, const glm::vec3& up) {
+glm::dmat4 LookAt(const glm::vec3& eye, const glm::vec3& center, const glm::vec3& up) {
     
     glm::dmat4 cameraToWorld;
     // Initialize fourth column of viewing matrix
-    cameraToWorld[0][3] = pos.x;
-    cameraToWorld[1][3] = pos.y;
-    cameraToWorld[2][3] = pos.z;
+    cameraToWorld[0][3] = eye.x;
+    cameraToWorld[1][3] = eye.y;
+    cameraToWorld[2][3] = eye.z;
     cameraToWorld[3][3] = 1;
 
-    glm::vec3 dir = glm::normalize(look - pos);
+    glm::vec3 dir = glm::normalize(center - eye);
     glm::vec3 left = glm::normalize(glm::cross(glm::normalize(up), dir));
     glm::vec3 newUp = glm::cross(dir, left);
 
