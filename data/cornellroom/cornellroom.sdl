@@ -6,7 +6,7 @@
 # do Vinicius 6/12/2005
 
 size 100 100
-ortho -1 -1 1 1
+ortho -1.5 -1.5 1.5 1.5
 background 0.0 0.0 0.0
 ambient 0.5
 
