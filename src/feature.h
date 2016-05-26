@@ -35,10 +35,10 @@ struct Feature {
             mat.kd,
             mat.kt,
             mat.ks,
-            mat.n,
+            static_cast<float>(mat.n),
             mat.ir,
-            (mat.emissive ? 1.0 : -1.0),
-            (positive ? 1.0 : -1.0)
+            (mat.emissive ? 1.0f : -1.0f),
+            (positive ? 1.0f : -1.0f)
         };
     }
 };

@@ -129,7 +129,7 @@ void pathtrace(std::string filename, const Size& size, const Scene& scene, const
     std::cerr << "Working on pathtrace..." << std::endl;
 
     NPYWriter writer(filename);
-    writer.writeHeader({cam.nPaths(), size.height, size.width, Feature::feature_size});
+    writer.writeHeader({cam.nPaths(), static_cast<uint>(size.height), static_cast<uint>(size.width), Feature::feature_size});
     for (unsigned n = 0; n < cam.nPaths(); n++) {
         for (unsigned i = 0; i < h; i++) {
             for (unsigned j = 0; j < w; j++) {
