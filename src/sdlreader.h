@@ -11,6 +11,7 @@ namespace PathTrace {
 namespace SDLReader {
 void readSDLFile(const std::string& path, PathTrace::Size& size, PathTrace::Camera& cam, PathTrace::Scene& s);
 void readOBJFile(const std::string& path, PathTrace::Mesh& m);
+void readCamera(std::istream& stream, Camera& cam);
 }
 }
 

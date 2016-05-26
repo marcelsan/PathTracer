@@ -2,6 +2,8 @@
 #include <glm/glm.hpp>
 #include <fstream>
 #include <iostream>
+#include <sstream>
+#include <string>
 #include <memory>
 
 #include "scene.h"
@@ -13,11 +15,8 @@ using namespace PathTrace;
 
 int main(int argc, char const *argv[])
 {
-    if (argc < 2) {
+    if (argc < 1) {
         std::cerr << "ERROR: no specified SDL file." << std::endl;
-        exit(-1);
-    } else if (argc < 3) {
-        std::cerr << "ERROR: no specified .pnm output file." << std::endl;
         exit(-1);
     }
 
@@ -25,11 +24,16 @@ int main(int argc, char const *argv[])
     Camera cam;
     Size size {100, 100};
 
-    std::string path(argv[1]);
-    SDLReader::readSDLFile(path, size, cam, s);
+    SDLReader::readSDLFile(argv[1], size, cam, s);
 
-    cam.apply();
-    pathtrace(argv[2], size, s, cam);
+    std::string line;
+    while (std::getline(std::cin, line)) {
+        std::string path;
+        std::istringstream ss(line);
+        ss >> path;
+        SDLReader::readCamera(ss, cam);
+        pathtrace(path, size, s, cam);
+    }
 
     return 0;
 }

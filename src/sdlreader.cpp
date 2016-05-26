@@ -231,11 +231,12 @@ inline static void readSize(std::istream& stream, Size& size, Camera& cam)
     cam.setAspect(float(size.width)/float(size.height));
 }
 
-inline static void readCamera(std::istream& stream, Camera& cam)
+void readCamera(std::istream& stream, Camera& cam)
 {
     vec3 e, c, u;
     stream >> e >> c >> u;
     cam.lookAt(e, c, u);
+    cam.apply();
 }
 
 void readSDLFile(const std::string& sdlpath, Size& size, Camera& cam, PathTrace::Scene& s)
