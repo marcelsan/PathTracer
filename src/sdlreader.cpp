@@ -225,19 +225,10 @@ inline static void readMesh(const std::string& path, std::istream& stream, Scene
     s.add(std::move(mesh));
 }
 
-inline static void readSize(std::istream& stream, ImageBuffer& image, Camera& cam)
+inline static void readSize(std::istream& stream, Size& size, Camera& cam)
 {
-    size_t w, h;
-    stream >> w >> h;
-    image.setSize(w, h);
-    cam.setAspect(float(w)/float(h));
-}
-
-inline static void readTonemapping(std::istream& stream, ImageBuffer& image)
-{
-    float tonemapping;
-    stream >> tonemapping;
-    image.setTonemapping(tonemapping);
+    stream >> size.width >> size.height;
+    cam.setAspect(float(size.width)/float(size.height));
 }
 
 inline static void readCamera(std::istream& stream, Camera& cam)
@@ -247,7 +238,7 @@ inline static void readCamera(std::istream& stream, Camera& cam)
     cam.lookAt(e, c, u);
 }
 
-void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, PathTrace::Scene& s)
+void readSDLFile(const std::string& sdlpath, Size& size, Camera& cam, PathTrace::Scene& s)
 {
     std::ifstream stream;
     load(sdlpath, stream);
@@ -282,10 +273,7 @@ void readSDLFile(const std::string& sdlpath, ImageBuffer& image, Camera& cam, Pa
             readMesh(path, ss, s);
         }
         else if (option == "size") {
-            readSize(ss, image, cam);
-        }
-        else if (option == "tonemapping") {
-            readTonemapping(ss, image);
+            readSize(ss, size, cam);
         }
         else if (option == "ambient") {
             readAmbient(ss, s);

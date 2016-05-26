@@ -15,7 +15,7 @@ void Scene::add(std::unique_ptr<Object> o)
     objects.push_back(std::move(o));
 }
 
-bool Scene::raycast(const Ray& ray, Intersection& closestInter, float closest_distance) const
+bool Scene::raycast(const Ray& ray, Intersection& closestInter, float& closest_distance) const
 {
     bool any_intersection = false;
 

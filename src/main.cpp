@@ -5,7 +5,6 @@
 #include <memory>
 
 #include "scene.h"
-#include "imagebuffer.h"
 #include "sdlreader.h"
 #include "raytrace.h"
 
@@ -24,17 +23,13 @@ int main(int argc, char const *argv[])
 
     Scene s;
     Camera cam;
-    ImageBuffer ib(100, 100);
+    Size size {100, 100};
 
     std::string path(argv[1]);
-    SDLReader::readSDLFile(path, ib, cam, s);
+    SDLReader::readSDLFile(path, size, cam, s);
 
     cam.apply();
-    raytrace(ib, s, cam);
-
-    std::ofstream ofs (argv[2], std::ofstream::out);
-    ofs << ib;
-    ofs.close();
+    pathtrace(argv[2], size, s, cam);
 
     return 0;
 }
