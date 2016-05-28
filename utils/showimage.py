@@ -37,13 +37,13 @@ plt.imsave('img/06-matka.png', img, cmap='Greys_r')
 img = np.average(a[:n,:,:,12], axis=0)
 plt.imsave('img/07-matkd.png', img, cmap='Greys_r')
 
-# Mat kt
-img = np.average(a[:n,:,:,13], axis=0)
-plt.imsave('img/08-matkt.png', img, cmap='Greys_r')
-
 # Mat ks
+img = np.average(a[:n,:,:,13], axis=0)
+plt.imsave('img/08-matks.png', img, cmap='Greys_r')
+
+# Mat kt
 img = np.average(a[:n,:,:,14], axis=0)
-plt.imsave('img/09-matks.png', img, cmap='Greys_r')
+plt.imsave('img/09-matkt.png', img, cmap='Greys_r')
 
 # Mat n
 img = np.average(np.clip(a[:n,:,:,15], 0, 50), axis=0)
@@ -52,3 +52,15 @@ plt.imsave('img/10-matn.png', img, cmap='Greys_r')
 # Mat ir
 img = np.average(np.clip(a[:n,:,:,16], 0, 50), axis=0)
 plt.imsave('img/11-matir.png', img, cmap='Greys_r')
+
+# Mat is emissive
+img = np.average(np.clip(a[:n,:,:,17], 0, 50), axis=0)
+plt.imsave('img/12-matemissive.png', img, cmap='Greys_r')
+
+# Scene is emissive
+img = np.average(np.clip(a[:n,:,:,18], 0, 50), axis=0)
+plt.imsave('img/13-ispositive.png', img, cmap='Greys_r')
+
+# Mat ka, kd, ks
+img = np.average(a[:n,:,:,11:14], axis=0)
+plt.imsave('img/06-08-matkakdks.png', img)
