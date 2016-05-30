@@ -20,3 +20,5 @@ set(pathtracer_SRCS
 )
 
 add_executable(pathtracer ${pathtracer_SRCS})
+
+target_link_libraries(pathtracer ${ImageMagick_LIBRARIES})
