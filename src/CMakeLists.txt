@@ -17,6 +17,7 @@ set(pathtracer_SRCS
     light.cpp
     main.cpp
     util.cpp
+    transform.cpp
 )
 
 add_executable(pathtracer ${pathtracer_SRCS})

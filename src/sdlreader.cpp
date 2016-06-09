@@ -214,14 +214,46 @@ inline static void readOrtho(std::istream& stream, Camera& cam)
     cam.setOrtho(min, max);
 }
 
-inline static void readMesh(const std::string& path, std::istream& stream, Scene& s)
+inline static void readMesh(const std::string& path, std::istream& stream, Scene& s, const std::string& objFile)
 {
-    std::string objFile;
-    stream >> objFile;
+    Material mat;
+    Transform meshTransform;
+    bool has_transform = false;
+    
+    while(true) {
+        std::string line;    
+        std::getline(stream, line);
+        std::stringstream ss(line);
 
-    Material mat = readMaterial(stream);
+        std::string option;
+        ss >> option;
+
+        if(option == "endobject") {
+            break;
+        }
+        else if(option == "Material") {
+            mat = readMaterial(ss);
+        }
+        else if(option == "Translate") {
+            vec3 t;
+            ss >> t;
+            meshTransform.translate(t);
+            has_transform = true;
+        }
+        else if(option == "Scale") {
+            vec3 s;
+            ss >> s;
+            meshTransform.scale(s);
+            has_transform = true;
+        }
+    }
+
     std::unique_ptr<Mesh> mesh(new Mesh(mat));
     readOBJFile(path + objFile, *mesh);
+    if(has_transform) {
+        mesh->apply(meshTransform);
+    }
+
     s.add(std::move(mesh));
 }
 
@@ -271,7 +303,9 @@ void readSDLFile(const std::string& sdlpath, Size& size, Camera& cam, PathTrace:
             readOrtho(ss, cam);
         }
         else if (option == "object") {
-            readMesh(path, ss, s);
+            std::string objFile;
+            ss >> objFile;
+            readMesh(path, stream, s, objFile);
         }
         else if (option == "size") {
             readSize(ss, size, cam);

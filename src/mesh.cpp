@@ -149,6 +149,13 @@ void Mesh::calculateNormals()
     }
 }
 
+void Mesh::apply(const Transform& t)
+{
+    for (auto& v : vertices) {
+        v = t(v);
+    }
+}
+
 std::ostream& operator<<(std::ostream &output, const Mesh& m)
 {
     for (const auto& v: m.vertices) {

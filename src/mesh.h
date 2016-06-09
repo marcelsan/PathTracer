@@ -4,6 +4,7 @@
 #include "object.h"
 #include "material.h"
 #include "intersection.h"
+#include "transform.h"
 #include <cfloat>
 
 using namespace glm;
@@ -38,6 +39,7 @@ public:
     void addTriangle(Triangle t);
     unsigned int addNormal(vec3 normal);
     void calculateNormals();
+    void apply(const Transform& t);
 
     friend std::ostream& operator<<(std::ostream &output, const Mesh& m);
 
