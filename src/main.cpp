@@ -17,7 +17,7 @@ using namespace Magick;
 
 int main(int argc, char const **argv)
 {
-    if (argc < 1) {
+    if (argc < 2) {
         std::cerr << "ERROR: no specified SDL file." << std::endl;
         exit(-1);
     }
@@ -29,6 +29,8 @@ int main(int argc, char const **argv)
     Size size {100, 100};
 
     SDLReader::readSDLFile(argv[1], size, cam, s);
+    // pathtrace(argv[2], size, s, cam);
+    // return 0;
 
     std::string line;
     while (std::getline(std::cin, line)) {
