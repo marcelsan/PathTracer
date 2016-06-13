@@ -29,7 +29,7 @@ def generate_image(sdl, waypoints, num_frames, dest_dir="."):
 if __name__ == '__main__':
     sdl = sys.argv[1]
     dest_dir = sys.argv[2]
-    num_frames = int(sys.argv[3])
+    num_frames = int(sys.argv[3]) if len(sys.argv) >= 3 else 1
 
     waypoints = [
         [0, 0, 10, 0, 0, 0, 0, 1, 0],
