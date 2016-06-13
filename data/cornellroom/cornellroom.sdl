@@ -17,7 +17,7 @@ camera 0.0 0.0 10 0.0 0.0 0.0 0.0 1.0 0.0
 light luzcornell.obj 1.0 1.0 1.0 1.0
 #light 1.0 0.0 1.0 1.0
 
-npaths 10
+npaths 5
 #npaths 5
 
 # Aqui comeca a definicao das geometrias
@@ -55,14 +55,12 @@ endobject
 # cube 1 WHITE
 object cube1.obj 
 Material 1.0 1.0 1.0 0.3 0.2 0 0.5 5 2.5
-Scale 0.5 0.5 0.5
 endobject
 
 # cube 2 WHITE
-#object cube2.obj
-#Material 1.0 1.0 1.0 0.3 0.7 0 0 5
-#Translate 1 2 3
-#endobject
+object cube2.obj
+Material 1.0 1.0 1.0 0.3 0.7 0 0 5
+endobject
 
 objectquadric 1 1 1 0 0 0 0 0 20 99 1.0 1.0 1.0 0.0 0.3 0.0 1 1 1.5
 
