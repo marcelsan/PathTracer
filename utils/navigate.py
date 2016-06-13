@@ -13,7 +13,9 @@ def generate_image(sdl, waypoints, num_frames, dest_dir="."):
     waylen = len(waypoints)
 
     for x in range(0, waylen - 1):
+        print('waypoint: ', x)
         for t in range(0, num_frames):
+            print('num_frames: ', num_frames)
             filename = os.path.join(dest_dir, "%0.5d%0.5d.npy" % (x, t))
             cam = lerp(waypoints[x], waypoints[x + 1], t/float(num_frames))
             input_data += "%s %s\n" % (filename, " ".join(str(i) for i in cam))
