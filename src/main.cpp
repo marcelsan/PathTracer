@@ -5,7 +5,6 @@
 #include <sstream>
 #include <string>
 #include <memory>
-#include <Magick++.h> 
 
 #include "scene.h"
 #include "sdlreader.h"
@@ -13,7 +12,6 @@
 
 using namespace glm;
 using namespace PathTrace;
-using namespace Magick; 
 
 int main(int argc, char const **argv)
 {
@@ -22,15 +20,10 @@ int main(int argc, char const **argv)
         exit(-1);
     }
 
-    InitializeMagick("");
-
     Scene s;
     Camera cam;
     Size size {100, 100};
-
     SDLReader::readSDLFile(argv[1], size, cam, s);
-    // pathtrace(argv[2], size, s, cam);
-    // return 0;
 
     std::string line;
     while (std::getline(std::cin, line)) {
