@@ -13,7 +13,9 @@ def generate_image(sdl, waypoints, num_frames, dest_dir="."):
     waylen = len(waypoints)
 
     for x in range(0, waylen - 1):
+        print('waypoint: ', x)
         for t in range(0, num_frames):
+            print('num_frames: ', num_frames)
             filename = os.path.join(dest_dir, "%0.5d%0.5d.npy" % (x, t))
             cam = lerp(waypoints[x], waypoints[x + 1], t/float(num_frames))
             input_data += "%s %s\n" % (filename, " ".join(str(i) for i in cam))
@@ -27,7 +29,7 @@ def generate_image(sdl, waypoints, num_frames, dest_dir="."):
 if __name__ == '__main__':
     sdl = sys.argv[1]
     dest_dir = sys.argv[2]
-    num_frames = int(sys.argv[3])
+    num_frames = int(sys.argv[3]) if len(sys.argv) >= 3 else 1
 
     waypoints = [
         [0, 0, 15, 0, 0, 0, 0, 1, 0],

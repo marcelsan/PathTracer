@@ -5,7 +5,7 @@
 # Modificado de acordo com os testes
 # do Vinicius 6/12/2005
 
-size 100 100
+size 200 200
 ortho -1.5 -1.5 1.5 1.5
 background 0.0 0.0 0.0
 ambient 0.5
@@ -17,7 +17,7 @@ camera 0.0 0.0 10 0.0 0.0 0.0 0.0 1.0 0.0
 light luzcornell.obj 1.0 1.0 1.0 1.0
 #light 1.0 0.0 1.0 1.0
 
-npaths 5
+npaths 200
 #npaths 5
 
 # Aqui comeca a definicao das geometrias

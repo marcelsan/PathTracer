@@ -22,6 +22,7 @@ def npy2png(filename, tmp=dir):
 	return pngfilename
 
 with imageio.get_writer('movie.gif', mode='I') as writer:
-    for filename in (npy2png(fn) for fn in sys.argv[1:]):
+    for i, filename in enumerate(npy2png(fn) for fn in sys.argv[1:]):
+        print('reading i (%d) of %d' % (i, len(sys.argv) - 1))
         image = imageio.imread(filename)
         writer.append_data(image)
