@@ -29,8 +29,6 @@ int main(int argc, char const **argv)
     Size size {100, 100};
 
     SDLReader::readSDLFile(argv[1], size, cam, s);
-    // pathtrace(argv[2], size, s, cam);
-    // return 0;
 
     std::string line;
     while (std::getline(std::cin, line)) {
