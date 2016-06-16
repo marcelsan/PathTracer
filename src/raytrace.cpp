@@ -126,7 +126,8 @@ void pathtrace(NPYWriter &writer, const Size& size, const Scene& scene, const Ca
     const double h = size.height;
     static std::random_device rd;
     static std::mt19937 gen(rd());
-    for (unsigned n = 0; n < cam.nPaths(); n++) {
+    for (unsigned n = 0; n < cam.nPaths(); ++n) {
+        std::cerr << "sample " << n << std::endl;
         for (unsigned i = 0; i < h; i++) {
             for (unsigned j = 0; j < w; j++) {
                 std::uniform_real_distribution<float> vDis(i / h, (i + 1) / h);

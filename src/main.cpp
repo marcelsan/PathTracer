@@ -39,6 +39,7 @@ int main(int argc, char const **argv)
     NPYWriter writer(argv[3]);
     writer.writeHeader({nFrames, cam.nPaths(), (uint)size.height, (uint)size.width, Feature::feature_size});
     for (uint i = 0; i < nFrames; ++i) {
+        std::cerr << "frame " << i << std::endl;
         SDLReader::readCamera(waypointStream, cam);
         pathtrace(writer, size, s, cam);
     }
