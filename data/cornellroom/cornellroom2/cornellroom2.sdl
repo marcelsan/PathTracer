@@ -1,0 +1,107 @@
+# Tentativa :-) de arquivo sdl para Cornell Room
+# Marcelo Walter
+# Nov. 2005
+# Este arquivo NAO foi testado!!!
+# Modificado de acordo com os testes
+# do Vinicius 6/12/2005
+
+size 100 100
+ortho -1.5 -1.5 1.5 1.5
+background 0.2 0.0 0.2
+ambient 0.5
+
+# camera [eye] [center] [up]
+camera 0.0 0.0 10 0.0 0.0 0.0 0.0 1.0 0.0
+
+# Luz branca retangulo no centro do teto
+light luzcornell.obj 1.0 1.0 1.0 1.0
+#light 1.0 0.0 1.0 1.0
+
+#npaths 200
+npaths 5
+
+# Aqui comeca a definicao das geometrias
+# Um arquivo para cada parede
+# mais 2 arquivos com os cubos
+# As cores seguem a cena de Cornell
+
+#object <name.obj> red green blue ka kd ks kt n
+
+# floor WHITE
+object floor.obj 
+Material 1.0 1.0 1.0 0.3 0.7 0 0 5
+endobject
+
+# cube 1 WHITE  
+object cube1.obj 
+Material 0.0 1.0 1.0 0.3 0.2 0 0.5 5 2.5
+endobject
+
+# cube 2 WHITE
+object cube2.obj
+Material 1.0 1.0 1.0 0.3 0.7 0 0 5
+endobject
+
+# cube 3 WHITE  
+object cube1.obj 
+Material 0.0 0.0 1.0 0.3 0.2 0 0.5 5 2.5
+Translate 0 0 -15
+endobject
+
+# cube 4 WHITE
+object cube2.obj
+Material 1.0 1.0 0.0 0.3 0.7 0 0 5
+Translate 0 0 -15
+endobject
+
+# cube 5 WHITE  
+object cube1.obj 
+Material 0.0 0.0 1.0 0.3 0.2 0 0.5 5 2.5
+Translate 15 0 -15
+endobject
+
+# cube 6 WHITE
+object cube2.obj
+Material 1.0 1.0 0.0 0.3 0.7 0 0 5
+Translate 15 0 -15
+endobject
+
+# cube 7 WHITE  
+object cube1.obj 
+Material 0.0 0.0 1.0 0.3 0.2 0 0.5 5 2.5
+Translate -15 0 -15
+endobject
+
+# cube 8 WHITE
+object cube2.obj
+Material 1.0 1.0 0.0 0.3 0.7 0 0 5
+Translate -15 0 -15
+endobject
+
+# cube 5 WHITE  
+object cube1.obj 
+Material 0.0 0.0 1.0 0.3 0.2 0 0.5 5 2.5
+Translate 5 0 0
+endobject
+
+# cube 6 WHITE
+object cube2.obj
+Material 1.0 1.0 0.0 0.3 0.7 0 0 5
+Translate 5 0 0
+endobject
+
+# cube 7 WHITE  
+object cube1.obj 
+Material 0.0 0.0 1.0 0.3 0.2 0 0.5 5 2.5
+Translate -5 0 0
+endobject
+
+# cube 8 WHITE
+object cube2.obj
+Material 1.0 1.0 0.0 0.3 0.7 0 0 5
+Translate -5 0 0
+endobject
+
+objectquadric 1 1 1 0 0 0 0 0 20 99 1.0 1.0 1.0 0.0 0.3 0.0 1 1 1.5
+
+output cornell.pnm
