@@ -4,10 +4,11 @@
 #include "scene.h"
 #include "size.h"
 #include "camera.h"
+#include "npywriter.h"
 
 namespace PathTrace {
 
-void pathtrace(std::string filename, const Size& size, const Scene& scene, const Camera& cam);
+void pathtrace(NPYWriter &writer, const Size& size, const Scene& scene, const Camera& cam);
 
 }
 

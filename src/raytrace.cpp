@@ -120,16 +120,12 @@ inline static Feature raycast(const Ray& ray, const Scene& scene, float srcIr = 
     return feat;
 }
 
-void pathtrace(std::string filename, const Size& size, const Scene& scene, const Camera& cam)
+void pathtrace(NPYWriter &writer, const Size& size, const Scene& scene, const Camera& cam)
 {
+    const double w = size.width;
+    const double h = size.height;
     static std::random_device rd;
     static std::mt19937 gen(rd());
-    double w = size.width;
-    double h = size.height;
-    std::cerr << "Working on pathtrace..." << std::endl;
-
-    NPYWriter writer(filename);
-    writer.writeHeader({cam.nPaths(), static_cast<uint>(size.height), static_cast<uint>(size.width), Feature::feature_size});
     for (unsigned n = 0; n < cam.nPaths(); n++) {
         for (unsigned i = 0; i < h; i++) {
             for (unsigned j = 0; j < w; j++) {

@@ -6,6 +6,7 @@
 #include <string>
 #include <memory>
 
+#include "feature.h"
 #include "scene.h"
 #include "sdlreader.h"
 #include "raytrace.h"
@@ -18,6 +19,12 @@ int main(int argc, char const **argv)
     if (argc < 2) {
         std::cerr << "ERROR: no specified SDL file." << std::endl;
         exit(-1);
+    } else if (argc < 3) {
+        std::cerr << "ERROR: no specified waypoints file." << std::endl;
+        exit(-1);
+    } else if (argc < 4) {
+        std::cerr << "ERROR: no specified output file." << std::endl;
+        exit(-1);
     }
 
     Scene s;
@@ -25,13 +32,15 @@ int main(int argc, char const **argv)
     Size size {100, 100};
     SDLReader::readSDLFile(argv[1], size, cam, s);
 
-    std::string line;
-    while (std::getline(std::cin, line)) {
-        std::string path;
-        std::istringstream ss(line);
-        ss >> path;
-        SDLReader::readCamera(ss, cam);
-        pathtrace(path, size, s, cam);
+    uint nFrames;
+    std::ifstream waypointStream(argv[2], std::ifstream::in);
+    waypointStream >> nFrames;
+
+    NPYWriter writer(argv[3]);
+    writer.writeHeader({nFrames, cam.nPaths(), (uint)size.height, (uint)size.width, Feature::feature_size});
+    for (uint i = 0; i < nFrames; ++i) {
+        SDLReader::readCamera(waypointStream, cam);
+        pathtrace(writer, size, s, cam);
     }
 
     return 0;
